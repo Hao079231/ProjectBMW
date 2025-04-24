@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="EclipseModuleManager">
+    <libelement value="file://C:/Users/daont/Downloads/mssql-jdbc-12.8.0.jre11.jar" />
+    <libelement value="jar://$MODULE_DIR$/src/main/webapp/WEB-INF/lib/mssql-jdbc-12.8.0.jre11.jar!/" />
+    <libelement value="file://C:/Users/daont/.m2/repository/jakarta/servlet/jakarta.servlet-api/6.1.0/jakarta.servlet-api-6.1.0.jar" />
+    <libelement value="file://C:/Users/daont/.m2/repository/javax/servlet/javax.servlet-api/4.0.1/javax.servlet-api-4.0.1.jar" />
+    <conelement value="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v10.1 (2)" />
+    <conelement value="org.eclipse.jst.j2ee.internal.web.container" />
+    <conelement value="org.eclipse.jst.j2ee.internal.module.container" />
+    <src_description expected_position="1">
+      <src_folder value="file://$MODULE_DIR$/src/main/java" expected_position="1" />
+    </src_description>
+  </component>
+</module>
