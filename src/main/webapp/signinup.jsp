@@ -26,6 +26,7 @@
             <p class="text-gray-500 text-center mb-4">Use your personal details to create an account</p>
             <form action="SignInUp" method="POST">
                 <input type="hidden" name="action" value="signup">
+                <input type="hidden" name="csrfToken" value="${csrfToken}">
                 <input type="text" name="username" placeholder="User" class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <input type="password" name="password" placeholder="Password" class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <input type="text" name="email" placeholder="Email" class="w-full p-2 mb-4 border border-gray-300 rounded">
@@ -40,6 +41,7 @@
             <h2 class="text-3xl font-bold mb-4">Sign In</h2>
             <form action="SignInUp" method="POST">
                 <input type="hidden" name="action" value="signin">
+                <input type="hidden" name="csrfToken" value="${csrfToken}">
                 <input type="text" name="username" placeholder="User" class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <input type="password" name="password" placeholder="Password" class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded">SIGN IN</button>
