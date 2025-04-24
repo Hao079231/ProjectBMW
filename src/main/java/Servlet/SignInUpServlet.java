@@ -13,6 +13,7 @@ import java.util.List;
 
 import Utils.DBUsers;
 import Beans.DBConnection;
+import java.util.UUID;
 
 @WebServlet("/SignInUp")
 public class SignInUpServlet extends HttpServlet {
@@ -24,13 +25,22 @@ public class SignInUpServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try (Connection conn = DBConnection.getConnection()) {
-            // Lấy danh sách người dùng từ DB
-            List<Users> userList = DBUsers.getAllUsers(conn);
+        // Lấy danh sách người dùng từ DB
+        List<Users> userList = DBUsers.getAllUsers(conn);
 
-            // Đưa danh sách người dùng vào request để truyền tới JSP
-            request.setAttribute("userList", userList);
+        // Đưa danh sách người dùng vào request để truyền tới JSP
+        request.setAttribute("userList", userList);
 
-            // Chuyển hướng đến trang userlist.jsp để hiển thị
+        // Tạo CSRF token và lưu vào session
+//        HttpSession session = request.getSession();
+//        String csrfToken = UUID.randomUUID().toString(); // Tạo token ngẫu nhiên
+//        session.setAttribute("csrfToken", csrfToken);
+
+        // Chuyển token sang JSP
+//        request.setAttribute("csrfToken", csrfToken);
+
+
+        // Chuyển hướng đến trang userlist.jsp để hiển thị
             request.getRequestDispatcher("signinup.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,6 +49,17 @@ public class SignInUpServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Kiểm tra CSRF token
+//        HttpSession session = request.getSession();
+//        String sessionCsrfToken = (String) session.getAttribute("csrfToken");
+//        String requestCsrfToken = request.getParameter("csrfToken");
+//
+//        if (sessionCsrfToken == null || requestCsrfToken == null || !sessionCsrfToken.equals(requestCsrfToken)) {
+//            System.out.println("CSRF INVALID");
+//            response.sendRedirect("signinup.jsp?status=csrf_invalid");
+//            return;
+//        }
+
         String action = request.getParameter("action");
 
         // Kiểm tra hành động đăng ký hay đăng nhập
@@ -76,6 +97,8 @@ public class SignInUpServlet extends HttpServlet {
                     response.sendRedirect("ProductList");
                     //response.sendRedirect("userlist.jsp");
                 }
+                // Trong handleSignup hoặc handleSignin, sau khi xử lý thành công
+//                session.removeAttribute("csrfToken"); // Xóa token cũ
             } else {
                 response.sendRedirect("signinup.jsp?status=signin_failed");
             }
