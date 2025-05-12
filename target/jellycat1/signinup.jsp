@@ -15,6 +15,7 @@
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
     <!-- Navigation Buttons -->
     <div class="flex space-x-4 mb-6">
+        <a href="ProductList" class="bg-orange-500 text-white px-6 py-2 rounded-full">Home</a>
         <button id="show-login" class="bg-orange-500 text-white px-6 py-2 rounded-full">Login</button>
         <button id="show-signup" class="bg-orange-500 text-white px-6 py-2 rounded-full">Sign Up</button>
     </div>
