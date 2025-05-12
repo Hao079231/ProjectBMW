@@ -24,23 +24,20 @@ public class SignInUpServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try (Connection conn = DBConnection.getConnection()) {
-        // Lấy danh sách người dùng từ DB
-        List<Users> userList = DBUsers.getAllUsers(conn);
+        try (Connection conn = DBConnection.getConnection()) {
+            // Lấy danh sách người dùng từ DB
+            List<Users> userList = DBUsers.getAllUsers(conn);
 
-        // Đưa danh sách người dùng vào request để truyền tới JSP
-        request.setAttribute("userList", userList);
+            // Đưa danh sách người dùng vào request để truyền tới JSP
+            request.setAttribute("userList", userList);
 
-        // Tạo CSRF token và lưu vào session
-//        HttpSession session = request.getSession();
-//        String csrfToken = UUID.randomUUID().toString(); // Tạo token ngẫu nhiên
-//        session.setAttribute("csrfToken", csrfToken);
+            // Tạo CSRF token và lưu vào session
+            HttpSession session = request.getSession(true); // Đảm bảo session mới nếu cần
+            String csrfToken = UUID.randomUUID().toString();
+            session.setAttribute("csrfToken", csrfToken);
+            request.setAttribute("csrfToken", csrfToken);
 
-        // Chuyển token sang JSP
-//        request.setAttribute("csrfToken", csrfToken);
-
-
-        // Chuyển hướng đến trang userlist.jsp để hiển thị
+            // Chuyển hướng đến trang signinup.jsp
             request.getRequestDispatcher("signinup.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,18 +46,24 @@ public class SignInUpServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Kiểm tra CSRF token
-//        HttpSession session = request.getSession();
-//        String sessionCsrfToken = (String) session.getAttribute("csrfToken");
-//        String requestCsrfToken = request.getParameter("csrfToken");
-//
-//        if (sessionCsrfToken == null || requestCsrfToken == null || !sessionCsrfToken.equals(requestCsrfToken)) {
-//            System.out.println("CSRF INVALID");
-//            response.sendRedirect("signinup.jsp?status=csrf_invalid");
-//            return;
-//        }
-
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
+
+        // Xử lý đăng xuất trước, không cần kiểm tra CSRF
+        if ("logout".equals(action)) {
+            handleLogout(request, response);
+            return;
+        }
+
+        // Kiểm tra CSRF token cho các hành động khác
+        String sessionCsrfToken = (String) session.getAttribute("csrfToken");
+        String requestCsrfToken = request.getParameter("csrfToken");
+
+        if (sessionCsrfToken == null || requestCsrfToken == null || !sessionCsrfToken.equals(requestCsrfToken)) {
+            System.out.println("CSRF INVALID");
+            response.sendRedirect("signinup.jsp?status=csrf_invalid");
+            return;
+        }
 
         // Kiểm tra hành động đăng ký hay đăng nhập
         if ("signup".equals(action)) {
@@ -76,7 +79,6 @@ public class SignInUpServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // Kiểm tra các trường đăng nhập
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             response.sendRedirect("signinup.jsp?status=empty_fields");
             return;
@@ -86,19 +88,15 @@ public class SignInUpServlet extends HttpServlet {
             Users user = DBUsers.login(conn, username, password);
 
             if (user != null) {
-                // Lưu thông tin người dùng vào session nếu đăng nhập thành công
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
 
-                // Kiểm tra vai trò người dùng
                 if ("admin".equals(user.getRole())) {
                     response.sendRedirect("Product");
                 } else {
                     response.sendRedirect("ProductList");
-                    //response.sendRedirect("userlist.jsp");
                 }
-                // Trong handleSignup hoặc handleSignin, sau khi xử lý thành công
-//                session.removeAttribute("csrfToken"); // Xóa token cũ
+                session.removeAttribute("csrfToken");
             } else {
                 response.sendRedirect("signinup.jsp?status=signin_failed");
             }
@@ -108,15 +106,30 @@ public class SignInUpServlet extends HttpServlet {
         }
     }
 
+    private void handleLogout(HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        // Tạo session mới và CSRF token mới
+        HttpSession newSession = request.getSession(true);
+        String csrfToken = UUID.randomUUID().toString();
+        newSession.setAttribute("csrfToken", csrfToken);
+        request.setAttribute("csrfToken", csrfToken);
+        // Chuyển hướng đến signinup.jsp
+        request.setAttribute("status", "logout_success");
+        request.getRequestDispatcher("signinup.jsp").forward(request, response);
+    }
+
     private void handleSignup(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
-        String role = "user"; // Mặc định vai trò là user
+        String role = "user";
 
-        // Kiểm tra các trường bắt buộc
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty() ||
             email == null || email.trim().isEmpty() || address == null || address.trim().isEmpty() ||
             phone == null || phone.trim().isEmpty()) {
@@ -124,18 +137,15 @@ public class SignInUpServlet extends HttpServlet {
             return;
         }
 
-        // Tạo đối tượng người dùng mới với vai trò là "user"
         Users newUser = new Users(0, username, password, email, phone, address, role);
 
         try (Connection conn = DBConnection.getConnection()) {
-            // Kiểm tra nếu người dùng đã tồn tại
             Users existingUser = DBUsers.getUserByUsername(conn, username);
             if (existingUser != null) {
                 response.sendRedirect("signinup.jsp?status=user_exists");
                 return;
             }
 
-            // Thêm người dùng vào cơ sở dữ liệu
             DBUsers.insert(conn, newUser);
             response.sendRedirect("signinup.jsp?status=signup_success");
         } catch (Exception e) {

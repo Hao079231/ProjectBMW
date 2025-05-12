@@ -93,6 +93,7 @@
 
     <!-- Logout button -->
     <form action="SignInUp" method="post">
+        <input type="hidden" name="action" value="logout">
         <button type="submit" class="logout-btn">Đăng xuất</button>
     </form>
 
