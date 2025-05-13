@@ -1,0 +1,31 @@
+2025-05-13 16:11:32 [http-nio-8181-exec-3] INFO  Servlet.SignInUpServlet - GET request received from IP: 127.0.0.1
+2025-05-13 16:11:32 [http-nio-8181-exec-3] INFO  Servlet.SignInUpServlet - CSRF token generated for session: 394B6A141B401AB8B076CEAFC4BA7A6B
+2025-05-13 16:11:48 [http-nio-8181-exec-4] INFO  Servlet.SignInUpServlet - POST request received from IP: 127.0.0.1, action: signin
+2025-05-13 16:11:48 [http-nio-8181-exec-4] WARN  Servlet.SignInUpServlet - Signin failed from IP: 127.0.0.1, username: trunghao
+2025-05-13 16:36:02 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-13 16:36:03 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 29 products
+2025-05-13 16:36:06 [http-nio-8181-exec-4] INFO  Servlet.SignInUpServlet - GET request received from IP: 127.0.0.1
+2025-05-13 16:36:06 [http-nio-8181-exec-4] INFO  Servlet.SignInUpServlet - CSRF token generated for session: CD1291D87BAF6E01AF6149505AED4AA7
+2025-05-13 16:36:10 [http-nio-8181-exec-5] INFO  Servlet.SignInUpServlet - POST request received from IP: 127.0.0.1, action: signin
+2025-05-13 16:36:11 [http-nio-8181-exec-5] INFO  Servlet.SignInUpServlet - Signin successful from IP: 127.0.0.1, username: trunghao, role: user
+2025-05-13 16:36:11 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-13 16:36:11 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Successfully retrieved 29 products
+2025-05-13 16:36:15 [http-nio-8181-exec-9] INFO  Servlet.CartServlet - POST request received from IP: 127.0.0.1, action: add
+2025-05-13 16:36:15 [http-nio-8181-exec-9] INFO  Servlet.CartServlet - GET request received from IP: 127.0.0.1, action: add
+2025-05-13 16:36:15 [http-nio-8181-exec-9] INFO  Servlet.CartServlet - New cart created for session: CD1291D87BAF6E01AF6149505AED4AA7, IP: 127.0.0.1
+2025-05-13 16:36:15 [http-nio-8181-exec-9] INFO  Servlet.CartServlet - Added product ID: 1 with quantity: 1 to cart, IP: 127.0.0.1
+2025-05-13 16:37:27 [http-nio-8181-exec-3] INFO  Servlet.PayOrderServlet - Processing POST request for PayOrderServlet
+2025-05-13 16:37:27 [http-nio-8181-exec-3] INFO  Servlet.PayOrderServlet - Handling order submission
+2025-05-13 16:37:27 [http-nio-8181-exec-3] INFO  Servlet.PayOrderServlet - Processing handleSubmit for order placement
+2025-05-13 16:37:27 [http-nio-8181-exec-3] WARN  Servlet.PayOrderServlet - Missing or empty shipping address, redirecting to checkout
+2025-05-13 16:38:24 [http-nio-8181-exec-5] INFO  Servlet.PayOrderServlet - Processing POST request for PayOrderServlet
+2025-05-13 16:38:24 [http-nio-8181-exec-5] INFO  Servlet.PayOrderServlet - Handling order submission
+2025-05-13 16:38:24 [http-nio-8181-exec-5] INFO  Servlet.PayOrderServlet - Processing handleSubmit for order placement
+2025-05-13 16:38:24 [http-nio-8181-exec-5] INFO  Servlet.PayOrderServlet - Adding order to database
+2025-05-13 16:38:25 [http-nio-8181-exec-5] INFO  Servlet.PayOrderServlet - Order created with ID: 10
+2025-05-13 16:38:25 [http-nio-8181-exec-5] INFO  Servlet.PayOrderServlet - Cart cleared from session
+2025-05-13 16:38:25 [http-nio-8181-exec-5] INFO  Servlet.PayOrderServlet - Order placed successfully, redirecting to CustomerOrder
+2025-05-13 16:38:25 [http-nio-8181-exec-6] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-13 16:38:25 [http-nio-8181-exec-6] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-13 16:38:25 [http-nio-8181-exec-6] INFO  Servlet.CustomerOrderServlet - Fetching order list for customer ID: 9
+2025-05-13 16:38:25 [http-nio-8181-exec-6] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrders.jsp
