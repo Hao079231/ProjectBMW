@@ -4,17 +4,19 @@ import Beans.DBConnection;
 import Beans.Users;
 import Utils.DBUsers;
 import jakarta.servlet.annotation.WebServlet;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @WebServlet("/User")
 public class UserServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(UserServlet.class);
 
     public UserServlet() {
         super();
@@ -26,11 +28,14 @@ public class UserServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
 
-        // Nếu có tham số "setting" trong URL, chuyển đến trang chỉnh sửa thông tin
-        if (req.getParameter("setting") != null) {
+        String setting = req.getParameter("setting");
+        logger.info("Received GET request with setting parameter: {}", setting != null ? setting : "none");
+
+        if (setting != null) {
+            logger.debug("Forwarding to editProfile.jsp");
             req.getRequestDispatcher("/editProfile.jsp").forward(req, resp);
         } else {
-            // Nếu không có, chuyển đến trang hiển thị thông tin người dùng
+            logger.debug("Forwarding to profile.jsp");
             req.getRequestDispatcher("/profile.jsp").forward(req, resp);
         }
     }
@@ -41,10 +46,21 @@ public class UserServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
 
-        // Lấy thông tin người dùng từ form
+        String action = request.getParameter("action");
+        logger.info("Received POST request with action: {}", action != null ? action : "none");
+
         HttpSession session = request.getSession();
         Users user = (Users) session.getAttribute("user");
-        System.out.println("User ID: " + user.getUserId());
+
+        if (user == null) {
+            logger.warn("No user found in session for action: {}", action);
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        logger.debug("Processing user update for user ID: {}", user.getUserId());
+
+        // Lấy thông tin người dùng từ form
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -53,23 +69,23 @@ public class UserServlet extends HttpServlet {
         // Tạo đối tượng user
         Users users = new Users(user.getUserId(), username, user.getPassword(), email, phone, address, user.getRole());
 
-        // Kiểm tra xem action là sửa hay thêm mới
-        String action = request.getParameter("action");
-        
         try (Connection conn = DBConnection.getConnection()) {
-        	if ("update".equals(action)) {
-        	    DBUsers.updateUser(conn, users); // Sử dụng đối tượng users đã được tạo từ form
-        	    request.getSession().setAttribute("user", users); // Cập nhật session với thông tin mới
-        	    response.sendRedirect("profile.jsp");
-        	} 
-
-            else {
+            if ("update".equals(action)) {
+                logger.debug("Updating user information: username={}, email={}, phone={}, address={}",
+                    username, email, phone, address);
+                DBUsers.updateUser(conn, users);
+                request.getSession().setAttribute("user", users);
+                logger.info("Successfully updated user ID: {}", user.getUserId());
+                response.sendRedirect("profile.jsp");
+            } else {
+                logger.warn("Invalid action: {}", action);
+                request.setAttribute("errorMessage", "Invalid action.");
                 response.sendRedirect("error.jsp");
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Error processing user update for user ID: {}, action: {}", user.getUserId(), action, e);
+            request.setAttribute("errorMessage", "Error updating user profile: " + e.getMessage());
             response.sendRedirect("error.jsp");
         }
     }
-
 }
