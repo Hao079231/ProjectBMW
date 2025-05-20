@@ -15,6 +15,7 @@ Beans\Products.class
 Beans\Categories.class
 Servlet\CustomerOrderServlet.class
 Servlet\ProductListServlet.class
+Config\CSRFTokenFilter.class
 Utils\DBProduct.class
 Beans\Review.class
 Servlet\PayOrderServlet.class
