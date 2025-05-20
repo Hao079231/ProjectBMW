@@ -57,7 +57,8 @@
                 <input type="hidden" name="productName" value="<%= product.getName() %>">
                 <input type="hidden" name="price" value="<%= product.getPrice() %>">
                 <input type="hidden" name="productImage" value="<%= java.util.Base64.getEncoder().encodeToString(product.getImage()) %>">
-                <input type="hidden" name="quantity" value="1" /> 
+                <input type="hidden" name="quantity" value="1" />
+                <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
                 <button type="submit" 
                     class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 
                             absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
