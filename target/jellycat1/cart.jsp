@@ -110,6 +110,7 @@
                             <input type="hidden" name="action" value="edit"/>
                             <input type="hidden" name="productId" value="<%= productId %>"/>
                             <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1" class="border border-gray-300 rounded px-2"/>
+                            <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
                             <button type="submit" class="ml-2 bg-blue-600 text-white rounded px-2 py-1">Update</button>
                         </form>
                     </td>
@@ -118,6 +119,7 @@
                         <form action="CartServlet" method="post" class="inline">
                             <input type="hidden" name="action" value="remove"/>
                             <input type="hidden" name="productId" value="<%= productId %>"/>
+                            <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
                             <button type="submit" class="bg-red-600 text-white rounded px-2 py-1">Remove</button>
                         </form>
                     </td>

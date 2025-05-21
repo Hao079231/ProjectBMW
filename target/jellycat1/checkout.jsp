@@ -98,6 +98,7 @@
             </div>
 
             <div class="mt-6">
+                <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
                 <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded">Đặt hàng</button>
             </div>
         </form>
