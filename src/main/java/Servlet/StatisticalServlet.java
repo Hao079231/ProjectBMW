@@ -45,7 +45,7 @@ public class StatisticalServlet extends HttpServlet {
             ArrayList<Statistical> danhSachThongKe = dbStatistical.getThongKe(tuNgay, denNgay);
 
             logger.info("Retrieved {} statistical records for date range: {} to {}",
-                danhSachThongKe.size(), tuNgay, denNgay);
+                    danhSachThongKe.size(), tuNgay, denNgay);
             request.setAttribute("danhSachThongKe", danhSachThongKe);
             logger.debug("Forwarding to thongke.jsp with statistical data");
             request.getRequestDispatcher("thongke.jsp").forward(request, response);

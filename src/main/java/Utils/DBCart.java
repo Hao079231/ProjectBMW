@@ -49,9 +49,9 @@ public class DBCart {
     public static Cart getCartByUserId(int userId) throws SQLException, ClassNotFoundException {
         Cart cart = new Cart();
         String sql = "SELECT c.cartID, c.user_id, c.product_id, c.quantity, c.feature, " +
-                     "p.name AS productName, p.price, p.image " +
-                     "FROM Cart c JOIN Products p ON c.product_id = p.product_id " +
-                     "WHERE c.user_id = ?";
+                "p.name AS productName, p.price, p.image " +
+                "FROM Cart c JOIN Products p ON c.product_id = p.product_id " +
+                "WHERE c.user_id = ?";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -67,7 +67,7 @@ public class DBCart {
                 String name = rs.getString("productName");
                 int price = rs.getInt("price");
                 byte[] image = rs.getBytes("image");
-             // Create a Products object for the product
+                // Create a Products object for the product
                 Products product = new Products(productId, name, null, image, price, null, 0, 0, true);
 
                 // Create a CartItem object and add it to the cart
@@ -116,7 +116,7 @@ public class DBCart {
     }
     public static int addOrder(int customerId, double totalAmount, String shippingAddress) throws SQLException, ClassNotFoundException {
         String insertOrderQuery = "INSERT INTO Orders (customer_id, total_amount, shipping_address, payment_status, delivery_status, created_at, updated_at) " +
-                                   "VALUES (?, ?, ?, 0, 'confirmed', GETDATE(), GETDATE())";
+                "VALUES (?, ?, ?, 0, 'confirmed', GETDATE(), GETDATE())";
         int orderId = 0;
 
         try (Connection connection = DBConnection.getConnection();
@@ -139,7 +139,7 @@ public class DBCart {
     }
 
     // Thêm chi tiết đơn hàng
- // Thêm chi tiết đơn hàng và giảm stock
+    // Thêm chi tiết đơn hàng và giảm stock
     public static void addOrderItems(int orderId, Map<Integer, CartItem> cartItems) throws SQLException, ClassNotFoundException {
         String insertOrderItemQuery = "INSERT INTO OrderItems (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
         String updateStockQuery = "UPDATE Products SET stock = stock - ? WHERE product_id = ?";

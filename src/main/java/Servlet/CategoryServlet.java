@@ -25,7 +25,7 @@ public class CategoryServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String remoteIp = request.getRemoteAddr();
         String action = request.getParameter("action");
         logger.info("GET request received from IP: {}, action: {}", remoteIp, action);
@@ -58,7 +58,7 @@ public class CategoryServlet extends HttpServlet {
                 request.getRequestDispatcher("category_edit.jsp").forward(request, response);
             } catch (NumberFormatException e) {
                 logger.error("Invalid category ID format from IP: {}, parameter: {}, error: {}",
-                    remoteIp, request.getParameter("categoryId"), e.getMessage());
+                        remoteIp, request.getParameter("categoryId"), e.getMessage());
                 request.setAttribute("errorMessage", "Invalid category ID: " + e.getMessage());
                 request.getRequestDispatcher("error.jsp").forward(request, response);
             } catch (Exception e) {
@@ -75,7 +75,7 @@ public class CategoryServlet extends HttpServlet {
                 response.sendRedirect("Category?action=list");
             } catch (NumberFormatException e) {
                 logger.error("Invalid category ID format for deletion from IP: {}, parameter: {}, error: {}",
-                    remoteIp, request.getParameter("categoryId"), e.getMessage());
+                        remoteIp, request.getParameter("categoryId"), e.getMessage());
                 request.setAttribute("errorMessage", "Invalid category ID: " + e.getMessage());
                 request.getRequestDispatcher("error.jsp").forward(request, response);
             } catch (Exception e) {
@@ -92,7 +92,7 @@ public class CategoryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String remoteIp = request.getRemoteAddr();
         String action = request.getParameter("action");
         logger.info("POST request received from IP: {}, action: {}", remoteIp, action);
@@ -133,7 +133,7 @@ public class CategoryServlet extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             logger.error("Invalid category ID format for action: {} from IP: {}, parameter: {}, error: {}",
-                action, remoteIp, request.getParameter("categoryId"), e.getMessage());
+                    action, remoteIp, request.getParameter("categoryId"), e.getMessage());
             request.setAttribute("errorMessage", "Invalid category ID: " + e.getMessage());
             request.getRequestDispatcher("error.jsp").forward(request, response);
         } catch (Exception e) {

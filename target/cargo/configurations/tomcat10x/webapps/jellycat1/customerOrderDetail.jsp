@@ -1,8 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Beans.Orders" %>
+<%@ page import="Beans.Users" %>
 <%@ page import="Utils.DBOrder" %>
-<%@ page import="Beans.OrderItem"%>
+<%@ page import="Beans.OrderItem" %>
+<%
+    HttpSession sessionCheck = request.getSession(false);
+    if (sessionCheck == null || sessionCheck.getAttribute("user") == null) {
+        response.sendRedirect("signinup.jsp?status=login_required");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,83 +22,64 @@
     <title>Jellycat</title>
 </head>
 <body class="font-roboto bg-gray-100">
-
-    <!-- Kiểm tra và hiển thị thông báo lỗi nếu có -->
     <% if (request.getAttribute("error") != null) { %>
-        <div id="error-toast" class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
-            <!-- Icon lỗi -->
-            <i class="fas fa-exclamation-circle text-xl"></i>
-            <span><%= request.getAttribute("error") %></span>
-            <button onclick="closeToast('error-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
-        </div>
+    <div id="error-toast" class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+        <i class="fas fa-exclamation-circle text-xl"></i>
+        <span><%= request.getAttribute("error") %></span>
+        <button onclick="closeToast('error-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
+    </div>
     <% } %>
-
-    <%-- Kiểm tra thông báo thành công --%>
     <% if (request.getAttribute("message") != null) { %>
-        <div id="success-toast" class="bg-green-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
-            <!-- Icon thành công -->
-            <i class="fas fa-check-circle text-xl"></i>
-            <span><%= request.getAttribute("message") %></span>
-            <button onclick="closeToast('success-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
-        </div>
+    <div id="success-toast" class="bg-green-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+        <i class="fas fa-check-circle text-xl"></i>
+        <span><%= request.getAttribute("message") %></span>
+        <button onclick="closeToast('success-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
+    </div>
     <% } %>
-
     <script>
-        // Hàm đóng thông báo
         function closeToast(id) {
             var toast = document.getElementById(id);
             if (toast) {
-                toast.style.display = 'none';  // Ẩn thông báo khi nhấn OK
+                toast.style.display = 'none';
             }
         }
-
-        // Tự động ẩn thông báo sau một khoảng thời gian (ví dụ 5 giây)
         setTimeout(function() {
             var successToast = document.getElementById('success-toast');
             var errorToast = document.getElementById('error-toast');
             if (successToast) successToast.style.display = 'none';
             if (errorToast) errorToast.style.display = 'none';
-        }, 5000); // Ẩn sau 5 giây
+        }, 5000);
     </script>
-
     <div class="max-w-7xl mx-auto px-4 py-6" id="main-content">
-        <!-- Order Details Section -->
         <h1 class="text-3xl font-bold mb-6">Chi tiết đơn hàng</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="order-item-list">
-            <% 
-                // Lấy danh sách sản phẩm trong đơn hàng
+            <%
                 List<OrderItem> orderItems = (List<OrderItem>) request.getAttribute("orderItems");
                 if (orderItems != null) {
                     for (OrderItem item : orderItems) {
             %>
-                        <div class="bg-white p-6 rounded-lg shadow-lg">
-                            <img alt="Product Image" class="w-full h-80 object-cover mb-4 rounded" 
-                                 src="data:image/jpeg;base64,<%= new String(java.util.Base64.getEncoder().encode(item.getImage())) %>" />
-                            <h3 class="text-xl font-bold mb-2">Sản phẩm: <%= item.getProductName() %></h3>
-                            <p class="text-gray-700 mb-4">Số lượng: <%= item.getQuantity() %></p>
-                            <p class="text-gray-700 mb-4">Giá: <%= item.getPrice() %></p>
-                            <p class="text-gray-700 mb-4">Tổng: <%= item.getQuantity() * item.getPrice() %></p>
-
-                            <!-- Thêm nút Đánh giá, căn chỉnh qua góc phải -->
-                            <form action="Review" method="post" class="flex justify-end">
-							    <input type="hidden" name="action" value="check" />
-							    <input type="hidden" name="productId" value="<%= item.getProductId() %>" />
-							    <input type="hidden" name="orderId" value="<%= item.getOrderId() %>" />
-							    <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Đánh giá</button>
-							</form>
-                        </div>
-            <% 
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <img alt="Product Image" class="w-full h-80 object-cover mb-4 rounded"
+                     src="data:image/jpeg;base64,<%= new String(java.util.Base64.getEncoder().encode(item.getImage())) %>" />
+                <h3 class="text-xl font-bold mb-2">Sản phẩm: <%= item.getProductName() %></h3>
+                <p class="text-gray-700 mb-4">Số lượng: <%= item.getQuantity() %></p>
+                <p class="text-gray-700 mb-4">Giá: <%= item.getPrice() %></p>
+                <p class="text-gray-700 mb-4">Tổng: <%= item.getQuantity() * item.getPrice() %></p>
+                <form action="Review" method="post" class="flex justify-end">
+                    <input type="hidden" name="action" value="check" />
+                    <input type="hidden" name="productId" value="<%= item.getProductId() %>" />
+                    <input type="hidden" name="orderId" value="<%= item.getOrderId() %>" />
+                    <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Đánh giá</button>
+                </form>
+            </div>
+            <%
                     }
                 }
             %>
         </div>
-
-       <!-- Nút quay lại -->
-		<div class="flex justify-start mt-4">
-		    <a href="CustomerOrder" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">
-		        Quay lại
-		    </a>
-		</div>
-
+        <div class="flex justify-start mt-4">
+            <a href="CustomerOrder" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">Quay lại</a>
+        </div>
+    </div>
 </body>
 </html>
