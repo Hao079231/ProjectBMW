@@ -25,9 +25,8 @@
         <div id="signup-form" class="w-1/2 p-8 hidden">
             <h2 class="text-3xl font-bold mb-4">Sign Up For Client</h2>
             <p class="text-gray-500 text-center mb-4">Use your personal details to create an account</p>
-            <form action="SignInUp" method="POST">
+            <form id="signupForm" action="SignInUp" method="POST">
                 <input type="hidden" name="action" value="signup">
-                <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
                 <input type="text" name="username" placeholder="User" class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <input type="password" name="password" placeholder="Password" class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <input type="text" name="email" placeholder="Email" class="w-full p-2 mb-4 border border-gray-300 rounded">
@@ -40,9 +39,8 @@
         <!-- Sign In Form -->
         <div id="login-form" class="w-1/2 p-8">
             <h2 class="text-3xl font-bold mb-4">Sign In</h2>
-            <form action="SignInUp" method="POST">
+            <form id="loginForm" action="SignInUp" method="POST">
                 <input type="hidden" name="action" value="signin">
-                <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
                 <input type="text" name="username" placeholder="User" class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <input type="password" name="password" placeholder="Password" class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded">SIGN IN</button>
@@ -57,13 +55,13 @@
     </div>
 
     <script>
-        // Get elements
         const loginForm = document.getElementById('login-form');
         const signupForm = document.getElementById('signup-form');
         const showLoginButton = document.getElementById('show-login');
         const showSignupButton = document.getElementById('show-signup');
+        const loginFormElement = document.getElementById('loginForm');
+        const signupFormElement = document.getElementById('signupForm');
 
-        // Add event listeners
         showLoginButton.addEventListener('click', () => {
             loginForm.classList.remove('hidden');
             signupForm.classList.add('hidden');
@@ -73,6 +71,25 @@
             signupForm.classList.remove('hidden');
             loginForm.classList.add('hidden');
         });
+
+        function addCsrfTokenToForm(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfToken';
+                const csrfToken = '<%= session.getAttribute("csrfToken") %>';
+                csrfInput.value = csrfToken;
+
+                form.appendChild(csrfInput);
+
+                form.submit();
+            });
+        }
+
+        addCsrfTokenToForm(loginFormElement);
+        addCsrfTokenToForm(signupFormElement);
     </script>
 </body>
 </html>

@@ -21,16 +21,15 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 class="text-3xl font-bold mb-6">Sửa Sản Phẩm</h1>
-        <form class="flex flex-col md:flex-row" action="Product" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form id="productForm" class="flex flex-col md:flex-row" action="Product" method="post" enctype="multipart/form-data" onsubmit="return validateFormAndAddCsrf()">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="productId" value="${product.productId}">
-            
+
             <!-- Bên trái form: Thông tin sản phẩm -->
             <div class="md:w-1/2 md:pr-4">
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-name">Tên Sản Phẩm</label>
                     <input type="text" id="product-name" name="name" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập tên sản phẩm" value="${product.name}" required>
-                    <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-description">Mô Tả</label>
@@ -115,8 +114,7 @@
             reader.readAsDataURL(event.target.files[0]);
         });
 
-        // Validation function for the form
-        function validateForm() {
+        function validateFormAndAddCsrf() {
             const name = document.getElementById('product-name').value;
             const price = document.getElementById('product-price').value;
             const stock = document.getElementById('product-stock').value;
@@ -125,6 +123,18 @@
                 alert("Vui lòng điền đầy đủ thông tin!");
                 return false;
             }
+
+            event.preventDefault();
+
+            const form = document.getElementById('productForm');
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfToken';
+            const csrfToken = '<%= session.getAttribute("csrfToken") %>';
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+
+            form.submit();
             return true;
         }
     </script>

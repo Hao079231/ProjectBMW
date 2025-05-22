@@ -38,19 +38,19 @@
             // Lấy thông báo lỗi từ session và hiển thị nếu có
             String errorMessage = (String) session.getAttribute("error");
             if (errorMessage != null) {
-        %>
+%>
         <div class="alert alert-danger text-red-500">
             <%= errorMessage %>
         </div>
-        <% 
-            session.removeAttribute("error"); 
+<%
+            session.removeAttribute("error");
             }
-        %>
-        <% 
+%>
+        <%
             // Lấy giỏ hàng từ session
             Beans.Cart cart = (Beans.Cart) session.getAttribute("cart");
             if (cart != null && !cart.isEmpty()) {
-        %>
+%>
 
         <!-- Giỏ hàng -->
         <h2 class="text-2xl font-semibold mb-4">Sản phẩm</h2>
@@ -64,7 +64,7 @@
                 </tr>
             </thead>
             <tbody>
-                <% 
+                <%
                     // Hiển thị từng sản phẩm trong giỏ hàng
                     for (Map.Entry<Integer, CartItem> entry : cart.getItems().entrySet()) {
                         Integer productId = entry.getKey();
@@ -77,7 +77,7 @@
                     <td class="py-2 px-4 border-b"><%= item.getQuantity() %></td>
                     <td class="py-2 px-4 border-b"><%= item.getTotal() %> VND</td>
                 </tr>
-                <% 
+                <%
                     }
                 %>
             </tbody>
@@ -89,28 +89,50 @@
 
         <!-- Form thông tin giao hàng và thanh toán -->
         <h2 class="text-2xl font-semibold mt-8 mb-4">Địa chỉ giao hàng</h2>
-        <form action="<%= request.getContextPath() %>/PayOrder" method="post">
-
-         <input type="hidden" name="action" value="submit" />
+        <form id="checkoutForm" action="<%= request.getContextPath() %>/PayOrder" method="post">
+            <input type="hidden" name="action" value="submit" />
             <div class="mb-4">
                 <label for="shippingAddress" class="block text-sm font-semibold">Địa chỉ</label>
                 <input type="text" id="shippingAddress" name="shippingAddress" required class="w-full p-2 border border-gray-300 rounded mt-2" />
             </div>
 
             <div class="mt-6">
-                <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
                 <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded">Đặt hàng</button>
             </div>
         </form>
-        <% 
+        <%
             } else {
         %>
         <div class="text-center text-red-500">
             <p>Giỏ hàng của bạn trống!</p>
         </div>
-        <% 
+        <%
             }
         %>
     </div>
+
+    <script>
+        function addCsrfTokenToForm(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default submission
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfToken';
+                const csrfToken = '<%= session.getAttribute("csrfToken") %>';
+                csrfInput.value = csrfToken;
+
+                form.appendChild(csrfInput);
+                form.submit();
+            });
+        }
+
+        // Apply CSRF token handling to the checkout form
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkoutForm = document.getElementById('checkoutForm');
+            if (checkoutForm) {
+                addCsrfTokenToForm(checkoutForm);
+            }
+        });
+    </script>
 </body>
 </html>

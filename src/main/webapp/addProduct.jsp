@@ -20,13 +20,12 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 class="text-3xl font-bold mb-6">Thêm Sản Phẩm</h1>
-        <form class="flex flex-col md:flex-row" action="Product" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
+        <form id="productForm" class="flex flex-col md:flex-row" action="Product" method="post" enctype="multipart/form-data" onsubmit="return validateFormAndAddCsrf();">
             <input type="hidden" name="action" value="add">
             <div class="md:w-1/2 md:pr-4">
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-name">Tên Sản Phẩm</label>
                     <input type="text" id="product-name" name="name" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập tên sản phẩm" required>
-                    <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-description">Mô Tả</label>
@@ -44,7 +43,7 @@
                     <label class="block text-gray-700 mb-2" for="product-stock">Số Lượng Tồn Kho</label>
                     <input type="number" id="product-stock" name="stock" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập số lượng tồn kho" required>
                 </div>
-                
+
                 <div class="mb-4">
                     <!-- Danh mục sản phẩm -->
                     <label class="block text-gray-700 mb-2" for="product-category">Danh Mục</label>
@@ -94,7 +93,6 @@
     </div>
 
     <script>
-        // Hiển thị preview ảnh
         document.getElementById('product-image').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -109,6 +107,23 @@
                 document.getElementById('image-preview').style.display = 'none';
             }
         });
+
+        // Hàm thêm CSRF token trước khi submit
+        function validateFormAndAddCsrf() {
+            const form = document.getElementById('productForm');
+            event.preventDefault();
+
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfToken';
+            const csrfToken = '<%= session.getAttribute("csrfToken") %>';
+            csrfInput.value = csrfToken;
+
+            form.appendChild(csrfInput);
+
+            form.submit();
+            return true;
+        }
     </script>
 </body>
 </html>
