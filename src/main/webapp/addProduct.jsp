@@ -20,13 +20,49 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 class="text-3xl font-bold mb-6">Thêm Sản Phẩm</h1>
+
+        <%
+            String status = request.getParameter("status");
+            if (status != null) {
+                String message = "";
+                switch (status) {
+                    case "login_required":
+                        message = "Vui lòng đăng nhập để thực hiện hành động này.";
+                        break;
+                    case "missing_fields":
+                        message = "Vui lòng điền đầy đủ các trường bắt buộc.";
+                        break;
+                    case "invalid_values":
+                        message = "Giá hoặc số lượng tồn kho không được âm.";
+                        break;
+                    case "invalid_format":
+                        message = "Dữ liệu nhập vào không đúng định dạng.";
+                        break;
+                    case "invalid_action":
+                        message = "Hành động không hợp lệ.";
+                        break;
+                    case "error":
+                        message = "Có lỗi xảy ra. Vui lòng thử lại.";
+                        break;
+                }
+                if (!message.isEmpty()) {
+        %>
+        <div class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+            <i class="fas fa-exclamation-circle text-xl"></i>
+            <span><%= message %></span>
+        </div>
+        <%
+                }
+            }
+        %>
+
         <form class="flex flex-col md:flex-row" action="Product" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
             <input type="hidden" name="action" value="add">
+            <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
             <div class="md:w-1/2 md:pr-4">
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-name">Tên Sản Phẩm</label>
                     <input type="text" id="product-name" name="name" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập tên sản phẩm" required>
-                    <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-description">Mô Tả</label>
@@ -34,7 +70,7 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-price">Giá</label>
-                    <input type="number" id="product-price" name="price" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập giá" required>
+                    <input type="number" id="product-price" name="price" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập giá" required min="0">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-size">Kích Cỡ</label>
@@ -42,11 +78,9 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-stock">Số Lượng Tồn Kho</label>
-                    <input type="number" id="product-stock" name="stock" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập số lượng tồn kho" required>
+                    <input type="number" id="product-stock" name="stock" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập số lượng tồn kho" required min="0">
                 </div>
-                
                 <div class="mb-4">
-                    <!-- Danh mục sản phẩm -->
                     <label class="block text-gray-700 mb-2" for="product-category">Danh Mục</label>
                     <select id="product-category" name="categoryId" class="w-full p-2 border border-gray-300 rounded" required>
                         <option value="">Chọn Danh Mục</option>
@@ -66,7 +100,6 @@
                         %>
                     </select>
                 </div>
-
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-status">Trạng Thái</label>
                     <select id="product-status" name="status" class="w-full p-2 border border-gray-300 rounded" required>
@@ -75,8 +108,8 @@
                     </select>
                 </div>
                 <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded">Thêm Sản Phẩm</button>
+                <button type="button" class="w-full bg-gray-500 text-white py-2 rounded mt-2" onclick="window.location.href='Product'">Hủy</button>
             </div>
-
             <div class="md:w-1/2 md:pl-4 flex flex-col items-center">
                 <div class="mb-4 w-full">
                     <label class="block text-gray-700 mb-2" for="product-image">Ảnh Sản Phẩm</label>
@@ -109,6 +142,29 @@
                 document.getElementById('image-preview').style.display = 'none';
             }
         });
+
+        // Kiểm tra dữ liệu trước khi gửi form
+        function validateForm() {
+            const name = document.getElementById('product-name').value.trim();
+            const description = document.getElementById('product-description').value.trim();
+            const price = parseFloat(document.getElementById('product-price').value);
+            const stock = parseInt(document.getElementById('product-stock').value);
+            const category = document.getElementById('product-category').value;
+
+            if (!name || !description || !category) {
+                alert("Vui lòng điền đầy đủ các trường bắt buộc!");
+                return false;
+            }
+            if (isNaN(price) || price < 0) {
+                alert("Giá sản phẩm phải là số không âm!");
+                return false;
+            }
+            if (isNaN(stock) || stock < 0) {
+                alert("Số lượng tồn kho phải là số không âm!");
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>

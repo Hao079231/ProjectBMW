@@ -1,7 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="Beans.Categories" %>
-
+<%@ page import="Beans.Users" %>
+<%
+    HttpSession sessionCheck = request.getSession(false);
+    if (sessionCheck == null || sessionCheck.getAttribute("user") == null) {
+        response.sendRedirect("signinup.jsp?status=login_required");
+        return;
+    }
+    Users user = (Users) sessionCheck.getAttribute("user");
+    if (!"admin".equals(user.getRole())) {
+        response.sendRedirect("error.jsp?message=AccessDenied");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,12 +38,10 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between">
                 <div class="flex space-x-4">
-                    <!-- Logo -->
                     <a class="flex items-center py-5 px-2 text-gray-700" href="#">
                         <i class="fas fa-store text-2xl"></i>
                         <span class="font-bold text-2xl ml-2">Jellycat</span>
                     </a>
-                    <!-- Primary Nav -->
                     <div class="hidden md:flex items-center space-x-1">
                         <a class="py-5 px-3 text-gray-700" href="Product" id="nav-products">Products</a>
                         <a class="py-5 px-3 text-gray-700" href="Order" id="nav-orders">Orders</a>
@@ -40,11 +50,9 @@
                         <a class="py-5 px-3 text-gray-700" href="Category" id="nav-category">Category</a>
                     </div>
                 </div>
-                <!-- Secondary Nav -->
                 <div class="hidden md:flex items-center space-x-1">
-                    <a class="py-2 px-3 bg-orange-500 text-white rounded-full" href="SignInUp">Logout</a>
+                    <a class="py-2 px-3 bg-orange-500 text-white rounded-full" href="SignInUp?action=logout">Logout</a>
                 </div>
-                <!-- Mobile Button -->
                 <div class="md:hidden flex items-center">
                     <button class="mobile-menu-button">
                         <i class="fas fa-bars"></i>
@@ -61,16 +69,13 @@
         <a class="block py-2 px-4 text-sm" href="Statistical" id="mobile-nav-statistics">Statistics</a>
         <a class="block py-2 px-4 text-sm" href="Category" id="mobile-nav-category">Category</a>
     </div>
-
     <!-- Content -->
     <div class="container mx-auto mt-8">
         <h2 class="text-2xl font-bold mb-4">Danh mục sản phẩm</h2>
         <a href="category_add.jsp" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Add New Category</a>
-
         <%
             List<Categories> categoriesList = (List<Categories>) request.getAttribute("categoriesList");
         %>
-
         <div class="bg-white shadow-md rounded my-6">
             <table class="min-w-full bg-white">
                 <thead class="bg-gray-800 text-white">
@@ -89,8 +94,8 @@
                         <td class="py-3 px-4"><%= category.getCategoryId() %></td>
                         <td class="py-3 px-4"><%= category.getCname() %></td>
                         <td class="py-3 px-4">
-                            <a href="CategoryServlet?action=edit&categoryId=<%= category.getCategoryId() %>" class="text-yellow-500 hover:underline">Edit</a> | 
-                            <a href="CategoryServlet?action=delete&categoryId=<%= category.getCategoryId() %>" class="text-red-500 hover:underline" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
+                            <a href="Category?action=edit&categoryId=<%= category.getCategoryId() %>" class="text-yellow-500 hover:underline">Edit</a> |
+                            <a href="Category?action=delete&categoryId=<%= category.getCategoryId() %>" class="text-red-500 hover:underline" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
                         </td>
                     </tr>
                     <%
@@ -107,9 +112,7 @@
             </table>
         </div>
     </div>
-
     <script>
-        // Mobile menu toggle
         const mobileMenuButton = document.querySelector(".mobile-menu-button");
         const mobileMenu = document.querySelector(".mobile-menu");
 

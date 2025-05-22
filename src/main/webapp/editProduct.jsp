@@ -2,12 +2,12 @@
 <%@ page import="Beans.Products" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Beans.Categories" %>
-<%@ page import="Beans.Products" %>
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sửa Sản Phẩm</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
@@ -21,16 +21,50 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 class="text-3xl font-bold mb-6">Sửa Sản Phẩm</h1>
+
+        <%
+            String status = request.getParameter("status");
+            if (status != null) {
+                String message = "";
+                switch (status) {
+                    case "login_required":
+                        message = "Vui lòng đăng nhập để thực hiện hành động này.";
+                        break;
+                    case "missing_fields":
+                        message = "Vui lòng điền đầy đủ các trường bắt buộc.";
+                        break;
+                    case "invalid_values":
+                        message = "Giá hoặc số lượng tồn kho không được âm.";
+                        break;
+                    case "invalid_format":
+                        message = "Dữ liệu nhập vào không đúng định dạng.";
+                        break;
+                    case "invalid_action":
+                        message = "Hành động không hợp lệ.";
+                        break;
+                    case "error":
+                        message = "Có lỗi xảy ra. Vui lòng thử lại.";
+                        break;
+                }
+                if (!message.isEmpty()) {
+        %>
+        <div class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+            <i class="fas fa-exclamation-circle text-xl"></i>
+            <span><%= message %></span>
+        </div>
+        <%
+                }
+            }
+        %>
+
         <form class="flex flex-col md:flex-row" action="Product" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="productId" value="${product.productId}">
-            
-            <!-- Bên trái form: Thông tin sản phẩm -->
+            <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
             <div class="md:w-1/2 md:pr-4">
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-name">Tên Sản Phẩm</label>
                     <input type="text" id="product-name" name="name" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập tên sản phẩm" value="${product.name}" required>
-                    <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-description">Mô Tả</label>
@@ -38,7 +72,7 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-price">Giá</label>
-                    <input type="number" id="product-price" name="price" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập giá" value="${product.price}" required min="1">
+                    <input type="number" id="product-price" name="price" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập giá" value="${product.price}" required min="0" step="0.01">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-size">Kích Thước</label>
@@ -46,7 +80,7 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-stock">Số Lượng</label>
-                    <input type="number" id="product-stock" name="stock" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập số lượng" value="${product.stock}" required min="1">
+                    <input type="number" id="product-stock" name="stock" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập số lượng" value="${product.stock}" required min="0">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-category">Danh Mục</label>
@@ -56,8 +90,9 @@
                             List<Categories> categoriesList = (List<Categories>) request.getAttribute("categoriesList");
                             if (categoriesList != null && !categoriesList.isEmpty()) {
                                 for (Categories category : categoriesList) {
+                                    String selected = category.getCategoryId() == ((Products)request.getAttribute("product")).getCategoryId() ? "selected" : "";
                         %>
-                        <option value="<%= category.getCategoryId() %>"><%= category.getCname() %></option>
+                        <option value="<%= category.getCategoryId() %>" <%= selected %>><%= category.getCname() %></option>
                         <%
                                 }
                             } else {
@@ -70,7 +105,7 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-status">Trạng Thái</label>
-                    <select id="product-status" name="status" class="w-full p-2 border border-gray-300 rounded">
+                    <select id="product-status" name="status" class="w-full p-2 border border-gray-300 rounded" required>
                         <option value="true" ${product.status ? 'selected' : ''}>Còn Hàng</option>
                         <option value="false" ${!product.status ? 'selected' : ''}>Hết Hàng</option>
                     </select>
@@ -78,51 +113,59 @@
                 <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded">Lưu</button>
                 <button type="button" class="w-full bg-gray-500 text-white py-2 rounded mt-2" onclick="window.location.href='Product'">Hủy</button>
             </div>
-
-            <!-- Bên phải form: Ảnh sản phẩm -->
             <div class="md:w-1/2 md:pl-4 flex flex-col items-center">
                 <div class="mb-4 w-full">
                     <label class="block text-gray-700 mb-2" for="product-image">Ảnh Sản Phẩm</label>
                     <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex justify-center items-center">
-                        <!-- Input file để chọn ảnh mới -->
-                        <input type="file" id="product-image" name="image" class="w-full text-center">
+                        <input type="file" id="product-image" name="image" class="w-full text-center" accept="image/*">
                     </div>
                 </div>
                 <div class="w-full h-64 border border-gray-300 rounded-lg flex justify-center items-center">
-                    <c:choose>
-                        <c:when test="${not empty product.image}">
-                            <!-- Hiển thị ảnh cũ nếu có -->
-                            <img id="image-preview" class="max-h-full max-w-full" src="data:image/jpeg;base64,${product.image}" alt="Image Preview">
-                        </c:when>
-                        <c:otherwise>
-                            <!-- Thông báo nếu không có ảnh -->
-                            <span>Chưa có ảnh sản phẩm</span>
-                        </c:otherwise>
-                    </c:choose>
+                    <% if (((Products)request.getAttribute("product")).getImage() != null) { %>
+                        <img id="image-preview" class="max-h-full max-w-full"
+                             src="data:image/jpeg;base64,<%= java.util.Base64.getEncoder().encodeToString(((Products)request.getAttribute("product")).getImage()) %>"
+                             alt="Image Preview">
+                    <% } else { %>
+                        <span>Chưa có ảnh sản phẩm</span>
+                    <% } %>
                 </div>
             </div>
         </form>
     </div>
 
     <script>
+        // Hiển thị preview ảnh
         document.getElementById('product-image').addEventListener('change', function(event) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                const img = document.getElementById('image-preview');
-                img.src = reader.result;
-                img.style.display = 'block';
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('image-preview');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(event.target.files[0]);
         });
 
-        // Validation function for the form
+        // Kiểm tra dữ liệu trước khi gửi form
         function validateForm() {
-            const name = document.getElementById('product-name').value;
-            const price = document.getElementById('product-price').value;
-            const stock = document.getElementById('product-stock').value;
+            const name = document.getElementById('product-name').value.trim();
+            const description = document.getElementById('product-description').value.trim();
+            const price = parseFloat(document.getElementById('product-price').value);
+            const stock = parseInt(document.getElementById('product-stock').value);
+            const category = document.getElementById('product-category').value;
 
-            if (!name || !price || !stock) {
-                alert("Vui lòng điền đầy đủ thông tin!");
+            if (!name || !description || !category) {
+                alert("Vui lòng điền đầy đủ các trường bắt buộc!");
+                return false;
+            }
+            if (isNaN(price) || price < 0) {
+                alert("Giá sản phẩm phải là số không âm!");
+                return false;
+            }
+            if (isNaN(stock) || stock < 0) {
+                alert("Số lượng tồn kho phải là số không âm!");
                 return false;
             }
             return true;

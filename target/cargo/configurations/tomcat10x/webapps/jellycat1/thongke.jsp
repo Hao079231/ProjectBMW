@@ -1,6 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="Beans.Statistical" %>
+<%@ page import="Beans.Users" %>
+<%
+    HttpSession sessionCheck = request.getSession(false);
+    if (sessionCheck == null || sessionCheck.getAttribute("user") == null) {
+        response.sendRedirect("signinup.jsp?status=login_required");
+        return;
+    }
+    Users user = (Users) sessionCheck.getAttribute("user");
+    if (!"admin".equals(user.getRole())) {
+        response.sendRedirect("error.jsp?message=AccessDenied");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,23 +43,22 @@
                     </div>
                     <div class="hidden md:flex items-center space-x-1">
                         <a class="py-5 px-3 text-gray-700" href="Product">Products</a>
-                        <a class="py-5 px-3 text-gray-700" href="OrderServlet">Orders</a>
-                        <a class="py-5 px-3 text-gray-700" href="CustomerServlet">Customers</a>
+                        <a class="py-5 px-3 text-gray-700" href="Order">Orders</a>
+                        <a class="py-5 px-3 text-gray-700" href="Customer">Customers</a>
                         <a class="py-5 px-3 text-gray-700" href="Statistical">Statistics</a>
-                        <a class="block py-2 px-4 text-sm" href="Category">Category</a>
+                        <a class="py-5 px-3 text-gray-700" href="Category">Category</a>
                     </div>
                 </div>
                 <div class="hidden md:flex items-center space-x-1">
-                    <a class="py-2 px-3 bg-orange-500 text-white rounded-full" href="SignInUp">Logout</a>
+                    <a class="py-2 px-3 bg-orange-500 text-white rounded-full" href="SignInUp?action=logout">Logout</a>
                 </div>
             </div>
         </div>
     </nav>
-
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-6" id="main-content">
         <h1 class="text-3xl font-bold mb-6">Thống kê đơn hàng</h1>
-        <form method="post" action="StatisticalServlet" class="mb-6">
+        <form method="post" action="Statistical" class="mb-6">
             <div class="flex space-x-4">
                 <div>
                     <label for="tuNgay" class="block text-gray-700">Từ ngày:</label>
@@ -59,7 +71,6 @@
                 <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg">Thống kê</button>
             </div>
         </form>
-
         <!-- Table for displaying orders -->
         <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
             <table class="min-w-full table-auto">
@@ -75,12 +86,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% 
+                    <%
                         List<Statistical> danhSachThongKe = (List<Statistical>) request.getAttribute("danhSachThongKe");
-                        long tongTienTatCa = 0; // Khai báo biến tính tổng tiền
+                        long tongTienTatCa = 0;
                         if (danhSachThongKe != null && !danhSachThongKe.isEmpty()) {
                             for (Statistical thongKe : danhSachThongKe) {
-                                tongTienTatCa += thongKe.getTongTien();  // Cộng dồn tổng tiền
+                                tongTienTatCa += thongKe.getTongTien();
                     %>
                     <tr>
                         <td class="px-6 py-3 text-sm text-gray-700"><%= thongKe.getId() %></td>
@@ -91,20 +102,20 @@
                         <td class="px-6 py-3 text-sm text-gray-700"><%= thongKe.getNgayDat() %></td>
                         <td class="px-6 py-3 text-sm text-gray-700"><%= thongKe.getTongTien() %></td>
                     </tr>
-                    <% 
+                    <%
                             }
                     %>
                     <tr class="bg-gray-100">
                         <td colspan="6" class="px-6 py-3 text-sm font-bold text-gray-700">Tổng cộng</td>
                         <td class="px-6 py-3 text-sm font-bold text-gray-700"><%= tongTienTatCa %></td>
                     </tr>
-                    <% 
+                    <%
                         } else {
                     %>
                     <tr>
                         <td colspan="7" class="px-6 py-3 text-sm text-gray-700 text-center">Không có dữ liệu thống kê.</td>
                     </tr>
-                    <% 
+                    <%
                         }
                     %>
                 </tbody>

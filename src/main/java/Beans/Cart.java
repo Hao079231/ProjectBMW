@@ -6,10 +6,10 @@ import java.util.Map;
 public class Cart {
     private int cartID;
     private int userId;
-    private int productId; 
+    private int productId;
     private int quantity;
     private String feature;
-    private Products product;  
+    private Products product;
 
     private Map<Integer, CartItem> items;
 
@@ -36,7 +36,7 @@ public class Cart {
         this.product = product; // Khởi tạo Product
     }
 
-	public int getCartID() {
+    public int getCartID() {
         return cartID;
     }
 
@@ -110,7 +110,7 @@ public class Cart {
             item.setQuantity(quantity);
         }
     }
- // Lấy danh sách các sản phẩm trong giỏ hàng
+    // Lấy danh sách các sản phẩm trong giỏ hàng
     public Map<Integer, CartItem> getItems() {
         return items;
     }
@@ -119,14 +119,18 @@ public class Cart {
     public double getTotalPrice() {
         double total = 0;
         for (CartItem item : items.values()) {
-            total += item.getPrice() * item.getQuantity();
+            if (item.getQuantity() >= 1 && item.getQuantity() <= 100) {
+                total += item.getPrice() * item.getQuantity();
+            }
         }
         return total;
     }
 
     // Kiểm tra xem giỏ hàng có rỗng không
     public boolean isEmpty() {
-    return items == null || items.isEmpty();
+        return items == null || items.isEmpty();
     }
-    
+    public void cleanCart() {
+        items.entrySet().removeIf(entry -> entry.getValue().getQuantity() < 1 || entry.getValue().getQuantity() > 100);
+    }
 }
