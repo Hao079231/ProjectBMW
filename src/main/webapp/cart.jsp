@@ -5,7 +5,6 @@
 <%@page import="java.util.Map"%>
 <%@ page import="Beans.Products" %>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,50 +14,72 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@1.9.6/dist/tailwind.min.css">
 </head>
 <body class="bg-gray-100">
-    	<% 
-	    String message = (String) session.getAttribute("message");
-	    String error = (String) session.getAttribute("error");
-	
-	    // Xóa thông báo khỏi session sau khi hiển thị
-	    session.removeAttribute("message");
-	    session.removeAttribute("error");
-	%>
-	
-	<!-- Thông báo thành công -->
-	<% if (message != null) { %>
-	    <div id="success-toast" class="bg-green-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
-	        <i class="fas fa-check-circle text-xl"></i>
-	        <span><%= message %></span>
-	        <button onclick="closeToast('success-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
-	    </div>
-	<% } %>
-	
-	<!-- Thông báo lỗi -->
-	<% if (error != null) { %>
-	    <div id="error-toast" class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
-	        <i class="fas fa-exclamation-circle text-xl"></i>
-	        <span><%= error %></span>
-	        <button onclick="closeToast('error-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
-	    </div>
-	<% } %>
-	
-	<script>
-	    // Hàm đóng thông báo
-	    function closeToast(id) {
-	        var toast = document.getElementById(id);
-	        if (toast) {
-	            toast.style.display = 'none';
-	        }
-	    }
-	
-	    // Tự động ẩn thông báo sau 5 giây
-	    setTimeout(function() {
-	        var successToast = document.getElementById('success-toast');
-	        var errorToast = document.getElementById('error-toast');
-	        if (successToast) successToast.style.display = 'none';
-	        if (errorToast) errorToast.style.display = 'none';
-	    }, 5000);
-	</script>
+    <%
+        String message = (String) session.getAttribute("message");
+        String error = (String) session.getAttribute("error");
+
+        // Xóa thông báo khỏi session sau khi hiển thị
+        session.removeAttribute("message");
+        session.removeAttribute("error");
+    %>
+
+    <!-- Thông báo thành công -->
+    <% if (message != null) { %>
+        <div id="success-toast" class="bg-green-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+            <i class="fas fa-check-circle text-xl"></i>
+            <span><%= message %></span>
+            <button onclick="closeToast('success-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
+        </div>
+    <% } %>
+
+    <!-- Thông báo lỗi -->
+    <% if (error != null) { %>
+        <div id="error-toast" class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+            <i class="fas fa-exclamation-circle text-xl"></i>
+            <span><%= error %></span>
+            <button onclick="closeToast('error-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
+        </div>
+    <% } %>
+
+    <script>
+        // Hàm đóng thông báo
+        function closeToast(id) {
+            var toast = document.getElementById(id);
+            if (toast) {
+                toast.style.display = 'none';
+            }
+        }
+
+        // Tự động ẩn thông báo sau 5 giây
+        setTimeout(function() {
+            var successToast = document.getElementById('success-toast');
+            var errorToast = document.getElementById('error-toast');
+            if (successToast) successToast.style.display = 'none';
+            if (errorToast) errorToast.style.display = 'none';
+        }, 5000);
+
+        // Function to add CSRF token to forms before submission
+        function addCsrfTokenToForm(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfToken';
+                const csrfToken = '<%= session.getAttribute("csrfToken") %>';
+                csrfInput.value = csrfToken;
+
+                form.appendChild(csrfInput);
+                form.submit();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartForms = document.querySelectorAll('form[action="CartServlet"]');
+            cartForms.forEach(form => addCsrfTokenToForm(form));
+        });
+    </script>
+
     <header class="bg-white shadow-lg">
         <div class="container mx-auto flex justify-between items-center py-4 px-6">
             <div class="logo flex items-center">
@@ -92,7 +113,6 @@
             </thead>
             <tbody>
                 <%
-                    // Hiển thị từng sản phẩm trong giỏ hàng
                     for (Map.Entry<Integer, CartItem> entry : cart.getItems().entrySet()) {
                         Integer productId = entry.getKey();
                         CartItem item = entry.getValue();
@@ -100,7 +120,7 @@
                 %>
                 <tr>
                     <td class="py-2 px-4 border-b">
-                        <img src="data:image/jpeg;base64,<%= java.util.Base64.getEncoder().encodeToString(product.getImage()) %>" 
+                        <img src="data:image/jpeg;base64,<%= java.util.Base64.getEncoder().encodeToString(product.getImage()) %>"
                              alt="<%= product.getName() %>" class="w-20 h-20 object-cover"/>
                     </td>
                     <td class="py-2 px-4 border-b"><%= product.getName() %></td>
@@ -110,7 +130,6 @@
                             <input type="hidden" name="action" value="edit"/>
                             <input type="hidden" name="productId" value="<%= productId %>"/>
                             <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1" class="border border-gray-300 rounded px-2"/>
-                            <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
                             <button type="submit" class="ml-2 bg-blue-600 text-white rounded px-2 py-1">Update</button>
                         </form>
                     </td>
@@ -119,7 +138,6 @@
                         <form action="CartServlet" method="post" class="inline">
                             <input type="hidden" name="action" value="remove"/>
                             <input type="hidden" name="productId" value="<%= productId %>"/>
-                            <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
                             <button type="submit" class="bg-red-600 text-white rounded px-2 py-1">Remove</button>
                         </form>
                     </td>

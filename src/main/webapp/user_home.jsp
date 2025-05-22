@@ -52,12 +52,10 @@
 
     <!-- Navigation -->
     <%
-    // Lấy danh sách loại sản phẩm từ request
-    List<Categories> categoriesList = (List<Categories>) request.getAttribute("categoriesList");
-%>
+        // Lấy danh sách loại sản phẩm từ request
+        List<Categories> categoriesList = (List<Categories>) request.getAttribute("categoriesList");
+    %>
 
-
-    <!-- Navigation -->
     <nav class="bg-gray-100 relative">
         <div class="container mx-auto flex items-center justify-between py-3">
             <div class="relative">
@@ -72,7 +70,7 @@
                         if (categoriesList != null && !categoriesList.isEmpty()) {
                             for (Categories category : categoriesList) {
                     %>
-                        <a href="ProductByCategory?categoryId=<%= category.getCategoryId() %>" 
+                        <a href="ProductByCategory?categoryId=<%= category.getCategoryId() %>"
                            class="block px-4 py-2 text-gray-600 hover:bg-gray-100">
                             <%= category.getCname() %>
                         </a>
@@ -96,7 +94,6 @@
         </div>
     </nav>
 
-
     <!-- Script -->
     <script>
         function toggleDropdown() {
@@ -112,6 +109,32 @@
                 document.querySelector('[aria-expanded]').setAttribute("aria-expanded", false);
             }
         });
+
+        // Function to add CSRF token to forms before submission
+        function addCsrfTokenToForm(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default submission
+
+                // Create a hidden input for the CSRF token
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfToken';
+                const csrfToken = '<%= session.getAttribute("csrfToken") %>';
+                csrfInput.value = csrfToken;
+
+                // Append the CSRF token to the form
+                form.appendChild(csrfInput);
+
+                // Submit the form
+                form.submit();
+            });
+        }
+
+        // Apply CSRF token handling to all cart forms
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartForms = document.querySelectorAll('form[action="CartServlet"]');
+            cartForms.forEach(form => addCsrfTokenToForm(form));
+        });
     </script>
 
     <main class="container mx-auto py-8">
@@ -125,8 +148,8 @@
                 <div class="product-card p-4 bg-white rounded shadow-md relative group">
                     <!-- Bọc hình ảnh và tên sản phẩm trong một thẻ <a> -->
                     <a href="productDetail.jsp?productId=<%= product.getProductId() %>" class="block">
-                        <img class="w-full h-80 object-cover rounded" 
-                             src="data:image/jpeg;base64,<%= java.util.Base64.getEncoder().encodeToString(product.getImage()) %>" 
+                        <img class="w-full h-80 object-cover rounded"
+                             src="data:image/jpeg;base64,<%= java.util.Base64.getEncoder().encodeToString(product.getImage()) %>"
                              alt="<%= product.getName() %>" loading="lazy"/>
                         <h3 class="text-lg font-bold text-center my-2"><%= product.getName() %></h3>
                     </a>
@@ -142,9 +165,8 @@
                         <input type="hidden" name="price" value="<%= product.getPrice() %>">
                         <input type="hidden" name="productImage" value="<%= java.util.Base64.getEncoder().encodeToString(product.getImage()) %>">
                         <input type="hidden" name="quantity" value="1" />
-                        <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
-                        <button type="submit" 
-                                class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 
+                        <button type="submit"
+                                class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500
                                        absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                             Thêm vào giỏ hàng
                         </button>
@@ -161,12 +183,12 @@
         </div>
 
         <!-- Pagination Controls -->
-        
+
     </main>
 
     <footer class="bg-blue-500 text-white py-4">
         <div class="container mx-auto text-center">
-            <p>&copy; 2024 Jellycat.</p>
+            <p>© 2024 Jellycat.</p>
         </div>
     </footer>
 </body>

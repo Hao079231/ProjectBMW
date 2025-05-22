@@ -49,7 +49,7 @@
             <p class="text-green-600 font-semibold">Price: <%= product.getPrice() %> VND</p>
             <p class="text-gray-500">Stock: <%= product.getStock() %></p>
           </div>
-          <!-- Nút Add to Bag -->
+
           <form method="post" action="CartServlet">
                 <input type="hidden" name="action" value="add"/>
                 <input type="hidden" name="userId" value="<%= session.getAttribute("userId") %>" />
@@ -58,30 +58,53 @@
                 <input type="hidden" name="price" value="<%= product.getPrice() %>">
                 <input type="hidden" name="productImage" value="<%= java.util.Base64.getEncoder().encodeToString(product.getImage()) %>">
                 <input type="hidden" name="quantity" value="1" />
-                <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
-                <button type="submit" 
-                    class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 
+                <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500
                             absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                         Thêm vào giỏ hàng
                 </button>
             </form>
         </div>
-      <% 
+      <%
           }
         } else {
       %>
         <p>Danh mục hiện tại chưa có sản phẩm.</p>
-      <% 
+      <%
         }
       %>
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-blue-500 text-white py-4">
     <div class="container mx-auto text-center">
-      <p>&copy; 2024 Jellycat. All rights reserved.</p>
+      <p>© 2024 Jellycat. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    function addCsrfTokenToForm(form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Create a hidden input for the CSRF token
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfToken';
+            const csrfToken = '<%= session.getAttribute("csrfToken") %>';
+            csrfInput.value = csrfToken;
+
+            form.appendChild(csrfInput);
+
+            form.submit();
+        });
+    }
+
+    // Apply CSRF token handling to all cart forms
+    document.addEventListener('DOMContentLoaded', function() {
+        const cartForms = document.querySelectorAll('form[action="CartServlet"]');
+        cartForms.forEach(form => addCsrfTokenToForm(form));
+    });
+  </script>
 </body>
 </html>

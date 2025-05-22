@@ -13,54 +13,80 @@
     <title>Jellycat</title>
 </head>
 <body class="font-roboto bg-gray-100">
-	<% 
-	    String message = (String) session.getAttribute("message");
-	    String error = (String) session.getAttribute("error");
-	
-	    // Xóa thông báo khỏi session sau khi hiển thị
-	    session.removeAttribute("message");
-	    session.removeAttribute("error");
-	%>
-	
-	<!-- Thông báo thành công -->
-	<% if (message != null) { %>
-	    <div id="success-toast" class="bg-green-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
-	        <i class="fas fa-check-circle text-xl"></i>
-	        <span><%= message %></span>
-	        <button onclick="closeToast('success-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
-	    </div>
-	<% } %>
-	
-	<!-- Thông báo lỗi -->
-	<% if (error != null) { %>
-	    <div id="error-toast" class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
-	        <i class="fas fa-exclamation-circle text-xl"></i>
-	        <span><%= error %></span>
-	        <button onclick="closeToast('error-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
-	    </div>
-	<% } %>
-	
-	<script>
-	    // Hàm đóng thông báo
-	    function closeToast(id) {
-	        var toast = document.getElementById(id);
-	        if (toast) {
-	            toast.style.display = 'none';
-	        }
-	    }
-	
-	    // Tự động ẩn thông báo sau 5 giây
-	    setTimeout(function() {
-	        var successToast = document.getElementById('success-toast');
-	        var errorToast = document.getElementById('error-toast');
-	        if (successToast) successToast.style.display = 'none';
-	        if (errorToast) errorToast.style.display = 'none';
-	    }, 5000);
-	</script>
+    <%
+        String message = (String) session.getAttribute("message");
+        String error = (String) session.getAttribute("error");
+
+        // Xóa thông báo khỏi session sau khi hiển thị
+        session.removeAttribute("message");
+        session.removeAttribute("error");
+    %>
+
+    <!-- Thông báo thành công -->
+    <% if (message != null) { %>
+        <div id="success-toast" class="bg-green-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+            <i class="fas fa-check-circle text-xl"></i>
+            <span><%= message %></span>
+            <button onclick="closeToast('success-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
+        </div>
+    <% } %>
+
+    <!-- Thông báo lỗi -->
+    <% if (error != null) { %>
+        <div id="error-toast" class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+            <i class="fas fa-exclamation-circle text-xl"></i>
+            <span><%= error %></span>
+            <button onclick="closeToast('error-toast')" class="ml-4 bg-transparent text-white font-bold py-2 px-4 border border-white rounded">OK</button>
+        </div>
+    <% } %>
+
+    <script>
+        // Hàm đóng thông báo
+        function closeToast(id) {
+            var toast = document.getElementById(id);
+            if (toast) {
+                toast.style.display = 'none';
+            }
+        }
+
+        // Tự động ẩn thông báo sau 5 giây
+        setTimeout(function() {
+            var successToast = document.getElementById('success-toast');
+            var errorToast = document.getElementById('error-toast');
+            if (successToast) successToast.style.display = 'none';
+            if (errorToast) errorToast.style.display = 'none';
+        }, 5000);
+
+        // Function to add CSRF token to forms before submission
+        function addCsrfTokenToForm(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default submission
+
+                // Create a hidden input for the CSRF token
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfToken';
+                const csrfToken = '<%= session.getAttribute("csrfToken") %>';
+                csrfInput.value = csrfToken;
+
+                // Append the CSRF token to the form
+                form.appendChild(csrfInput);
+
+                // Submit the form
+                form.submit();
+            });
+        }
+
+        // Apply CSRF token handling to all forms
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderForms = document.querySelectorAll('form[action="CustomerOrder"]');
+            orderForms.forEach(form => addCsrfTokenToForm(form));
+        });
+    </script>
 <!-- Slideshow Section -->
-		<div class="slideshow-container">
+    <div class="slideshow-container">
         <%@ include file="slideHeader.jsp" %>
-    	</div>
+    </div>
     <!-- Header -->
     <header class="border-b">
         <div class="container mx-auto flex justify-between items-center py-4 px-6">
@@ -87,8 +113,8 @@
                 </a>
 
                 <i class="fas fa-heart text-gray-600 text-lg cursor-pointer"></i>
-                
-                <a href="cart.jsp"> 
+
+                <a href="cart.jsp">
                     <i class="fas fa-shopping-cart text-gray-600 text-lg cursor-pointer"></i>
                 </a>
             </div>
@@ -111,7 +137,7 @@
     <div class="max-w-7xl mx-auto px-4 py-6" id="main-content">
         <!-- Orders Section -->
         <h1 class="text-3xl font-bold mb-6">Danh sách đơn hàng</h1>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="order-list">
             <!-- Order Cards will be inserted here dynamically -->
             <%
