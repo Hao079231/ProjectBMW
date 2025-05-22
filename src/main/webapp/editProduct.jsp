@@ -30,6 +30,7 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-name">Tên Sản Phẩm</label>
                     <input type="text" id="product-name" name="name" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập tên sản phẩm" value="${product.name}" required>
+                    <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>"/>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-description">Mô Tả</label>
