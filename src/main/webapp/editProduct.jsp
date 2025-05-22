@@ -6,22 +6,31 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>Sửa Sản Phẩm</title>
+    <!-- CSRF Token để JavaScript có thể truy cập -->
+    <meta name="csrf-token" content="${sessionScope.csrfToken}">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet" />
+    <!-- Nhúng script bảo vệ CSRF -->
+    <script src="${pageContext.request.contextPath}/js/csrf-protection.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
         }
     </style>
 </head>
+
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 class="text-3xl font-bold mb-6">Sửa Sản Phẩm</h1>
-        <form id="productForm" class="flex flex-col md:flex-row" action="Product" method="post" enctype="multipart/form-data" onsubmit="return validateFormAndAddCsrf()">
+        <form id="productForm" class="flex flex-col md:flex-row" action="Product" method="post"
+            enctype="multipart/form-data" onsubmit="return validateForm()">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="productId" value="${product.productId}">
 
@@ -29,69 +38,85 @@
             <div class="md:w-1/2 md:pr-4">
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-name">Tên Sản Phẩm</label>
-                    <input type="text" id="product-name" name="name" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập tên sản phẩm" value="${product.name}" required>
+                    <input type="text" id="product-name" name="name"
+                        class="w-full p-2 border border-gray-300 rounded"
+                        placeholder="Nhập tên sản phẩm" value="${product.name}" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-description">Mô Tả</label>
-                    <textarea id="product-description" name="description" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập mô tả sản phẩm" required>${product.description}</textarea>
+                    <textarea id="product-description" name="description"
+                        class="w-full p-2 border border-gray-300 rounded"
+                        placeholder="Nhập mô tả sản phẩm" required>${product.description}</textarea>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-price">Giá</label>
-                    <input type="number" id="product-price" name="price" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập giá" value="${product.price}" required min="1">
+                    <input type="number" id="product-price" name="price"
+                        class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập giá"
+                        value="${product.price}" required min="1">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-size">Kích Thước</label>
-                    <input type="text" id="product-size" name="size" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập kích thước" value="${product.size}" required>
+                    <input type="text" id="product-size" name="size"
+                        class="w-full p-2 border border-gray-300 rounded"
+                        placeholder="Nhập kích thước" value="${product.size}" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-stock">Số Lượng</label>
-                    <input type="number" id="product-stock" name="stock" class="w-full p-2 border border-gray-300 rounded" placeholder="Nhập số lượng" value="${product.stock}" required min="1">
+                    <input type="number" id="product-stock" name="stock"
+                        class="w-full p-2 border border-gray-300 rounded"
+                        placeholder="Nhập số lượng" value="${product.stock}" required min="1">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-category">Danh Mục</label>
-                    <select id="product-category" name="categoryId" class="w-full p-2 border border-gray-300 rounded" required>
+                    <select id="product-category" name="categoryId"
+                        class="w-full p-2 border border-gray-300 rounded" required>
                         <option value="">Chọn Danh Mục</option>
-                        <%
-                            List<Categories> categoriesList = (List<Categories>) request.getAttribute("categoriesList");
-                            if (categoriesList != null && !categoriesList.isEmpty()) {
+                        <% List<Categories> categoriesList = (List<Categories>)
+                                request.getAttribute("categoriesList");
+                                if (categoriesList != null && !categoriesList.isEmpty()) {
                                 for (Categories category : categoriesList) {
-                        %>
-                        <option value="<%= category.getCategoryId() %>"><%= category.getCname() %></option>
-                        <%
-                                }
-                            } else {
-                        %>
-                        <option value="">Không có danh mục nào</option>
-                        <%
-                            }
-                        %>
+                                %>
+                                <option value="<%= category.getCategoryId() %>">
+                                    <%= category.getCname() %>
+                                </option>
+                                <% } } else { %>
+                                    <option value="">Không có danh mục nào</option>
+                                    <% } %>
                     </select>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="product-status">Trạng Thái</label>
-                    <select id="product-status" name="status" class="w-full p-2 border border-gray-300 rounded">
-                        <option value="true" ${product.status ? 'selected' : ''}>Còn Hàng</option>
-                        <option value="false" ${!product.status ? 'selected' : ''}>Hết Hàng</option>
+                    <select id="product-status" name="status"
+                        class="w-full p-2 border border-gray-300 rounded">
+                        <option value="true" ${product.status ? 'selected' : '' }>Còn Hàng</option>
+                        <option value="false" ${!product.status ? 'selected' : '' }>Hết Hàng
+                        </option>
                     </select>
                 </div>
-                <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded">Lưu</button>
-                <button type="button" class="w-full bg-gray-500 text-white py-2 rounded mt-2" onclick="window.location.href='Product'">Hủy</button>
+                <button type="submit"
+                    class="w-full bg-orange-500 text-white py-2 rounded">Lưu</button>
+                <button type="button" class="w-full bg-gray-500 text-white py-2 rounded mt-2"
+                    onclick="window.location.href='Product'">Hủy</button>
             </div>
 
             <!-- Bên phải form: Ảnh sản phẩm -->
             <div class="md:w-1/2 md:pl-4 flex flex-col items-center">
                 <div class="mb-4 w-full">
                     <label class="block text-gray-700 mb-2" for="product-image">Ảnh Sản Phẩm</label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex justify-center items-center">
+                    <div
+                        class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex justify-center items-center">
                         <!-- Input file để chọn ảnh mới -->
-                        <input type="file" id="product-image" name="image" class="w-full text-center">
+                        <input type="file" id="product-image" name="image"
+                            class="w-full text-center">
                     </div>
                 </div>
-                <div class="w-full h-64 border border-gray-300 rounded-lg flex justify-center items-center">
+                <div
+                    class="w-full h-64 border border-gray-300 rounded-lg flex justify-center items-center">
                     <c:choose>
                         <c:when test="${not empty product.image}">
                             <!-- Hiển thị ảnh cũ nếu có -->
-                            <img id="image-preview" class="max-h-full max-w-full" src="data:image/jpeg;base64,${product.image}" alt="Image Preview">
+                            <img id="image-preview" class="max-h-full max-w-full"
+                                src="data:image/jpeg;base64,${product.image}" alt="Image Preview">
                         </c:when>
                         <c:otherwise>
                             <!-- Thông báo nếu không có ảnh -->
@@ -104,9 +129,9 @@
     </div>
 
     <script>
-        document.getElementById('product-image').addEventListener('change', function(event) {
+        document.getElementById('product-image').addEventListener('change', function (event) {
             const reader = new FileReader();
-            reader.onload = function() {
+            reader.onload = function () {
                 const img = document.getElementById('image-preview');
                 img.src = reader.result;
                 img.style.display = 'block';
@@ -114,7 +139,7 @@
             reader.readAsDataURL(event.target.files[0]);
         });
 
-        function validateFormAndAddCsrf() {
+        function validateForm() {
             const name = document.getElementById('product-name').value;
             const price = document.getElementById('product-price').value;
             const stock = document.getElementById('product-stock').value;
@@ -124,19 +149,9 @@
                 return false;
             }
 
-            event.preventDefault();
-
-            const form = document.getElementById('productForm');
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = 'csrfToken';
-            const csrfToken = '<%= session.getAttribute("csrfToken") %>';
-            csrfInput.value = csrfToken;
-            form.appendChild(csrfInput);
-
-            form.submit();
             return true;
         }
     </script>
 </body>
+
 </html>
