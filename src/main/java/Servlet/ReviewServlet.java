@@ -39,11 +39,9 @@ public class ReviewServlet extends HttpServlet {
 
         switch (action) {
             case "check":
-                // Kiểm tra xem sản phẩm đã được đánh giá chưa và chuyển hướng
                 handleCheck(request, response);
                 break;
             case "submit":
-                // Xử lý form đánh giá
                 handleSubmit(request, response);
                 break;
             default:
@@ -64,7 +62,7 @@ public class ReviewServlet extends HttpServlet {
         }
 
         logger.debug("Checking review for user ID: {}, product ID: {}, order ID: {}",
-            user.getUserId(), request.getParameter("productId"), request.getParameter("orderId"));
+                user.getUserId(), request.getParameter("productId"), request.getParameter("orderId"));
 
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
@@ -98,12 +96,12 @@ public class ReviewServlet extends HttpServlet {
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 logger.error("Error checking review status for product ID: {}, user ID: {}, order ID: {}",
-                    productId, user.getUserId(), orderId, e);
+                        productId, user.getUserId(), orderId, e);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi kết nối cơ sở dữ liệu.");
             }
         } catch (NumberFormatException e) {
             logger.warn("Invalid productId or orderId format: productId={}, orderId={}",
-                request.getParameter("productId"), request.getParameter("orderId"));
+                    request.getParameter("productId"), request.getParameter("orderId"));
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID sản phẩm hoặc đơn hàng không hợp lệ.");
         }
     }
@@ -119,7 +117,7 @@ public class ReviewServlet extends HttpServlet {
         }
 
         logger.info("Processing review submission for user ID: {}, product ID: {}, order ID: {}",
-            user.getUserId(), request.getParameter("productId"), request.getParameter("orderId"));
+                user.getUserId(), request.getParameter("productId"), request.getParameter("orderId"));
 
         try {
             int rating = Integer.parseInt(request.getParameter("rating"));
@@ -127,13 +125,34 @@ public class ReviewServlet extends HttpServlet {
             int productId = Integer.parseInt(request.getParameter("productId"));
             int orderId = Integer.parseInt(request.getParameter("orderId"));
 
+            // Kiểm tra payload nguy hiểm trong comment
+            if (comment != null && (comment.toLowerCase().contains("<script") || comment.contains("onerror") || comment.contains("javascript:"))) {
+                logger.warn("Dangerous input detected in comment: {}", comment);
+                request.setAttribute("error", "Nhập liệu chứa mã nguy hiểm!"); // Rút ngắn thông báo
+                try (Connection conn = SQLServerConnection.initializeDatabase()) {
+                    DBOrderDetail dbOrderDetail = new DBOrderDetail(conn);
+                    List<OrderItem> orderItems = dbOrderDetail.getOrderItems(orderId);
+                    request.setAttribute("orderItems", orderItems);
+                } catch (SQLException | ClassNotFoundException e) {
+                    logger.error("Error fetching order items: {}", e.getMessage());
+                }
+                request.getRequestDispatcher("customerOrderDetail.jsp").forward(request, response);
+                return;
+            }
+
+            // Lọc các ký tự nguy hiểm trong comment
+            if (comment != null) {
+                comment = comment.replaceAll("[<>\"';()]+", "");
+                comment = comment.replaceAll("(?:^|\\s)javascript:", "");
+            }
+
             try (Connection conn = SQLServerConnection.initializeDatabase()) {
                 BDReview bdReview = new BDReview(conn);
 
                 // Tạo Review mới và thêm vào cơ sở dữ liệu
                 Review newReview = new Review(productId, user.getUserId(), orderId, rating, comment);
                 logger.debug("Submitting review: rating={}, comment={}, productId={}, orderId={}",
-                    rating, comment, productId, orderId);
+                        rating, comment, productId, orderId);
                 boolean success = bdReview.addReview(newReview);
 
                 DBOrderDetail dbOrderDetail = new DBOrderDetail(conn);
@@ -142,24 +161,23 @@ public class ReviewServlet extends HttpServlet {
 
                 if (success) {
                     logger.info("Review added successfully for product ID: {}, user ID: {}, order ID: {}",
-                        productId, user.getUserId(), orderId);
+                            productId, user.getUserId(), orderId);
                     request.setAttribute("message", "Đánh giá đã được thêm thành công.");
                 } else {
                     logger.warn("Failed to add review for product ID: {}, user ID: {}, order ID: {}",
-                        productId, user.getUserId(), orderId);
+                            productId, user.getUserId(), orderId);
                     request.setAttribute("error", "Không thể thêm đánh giá. Vui lòng thử lại.");
                 }
 
-                // Quay lại trang chi tiết đơn hàng (customerOrderDetail.jsp)
                 request.getRequestDispatcher("customerOrderDetail.jsp").forward(request, response);
             } catch (SQLException | ClassNotFoundException e) {
                 logger.error("Error submitting review for product ID: {}, user ID: {}, order ID: {}",
-                    productId, user.getUserId(), orderId, e);
+                        productId, user.getUserId(), orderId, e);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi kết nối cơ sở dữ liệu.");
             }
         } catch (NumberFormatException e) {
             logger.warn("Invalid input format: rating={}, productId={}, orderId={}",
-                request.getParameter("rating"), request.getParameter("productId"), request.getParameter("orderId"));
+                    request.getParameter("rating"), request.getParameter("productId"), request.getParameter("orderId"));
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Dữ liệu đánh giá không hợp lệ.");
         }
     }
