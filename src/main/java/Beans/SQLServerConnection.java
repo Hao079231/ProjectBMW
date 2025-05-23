@@ -7,10 +7,10 @@ import java.sql.SQLException;
 public class SQLServerConnection {
 	public static Connection initializeDatabase() throws SQLException, ClassNotFoundException {
 		String dbDriver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-		String dbURL = "LAPTOP-AQL6LS36";
+		String dbURL = "LAPTOP-HT4FPL1E";
 		String dbName = "WEB"; 
 		String dbUserName = "sa"; 
-		String dbPassword = "1234567";
+		String dbPassword = "123";
 
 		String connectionURL = "jdbc:sqlserver://" + dbURL + ";databaseName=" + dbName
 				+ ";encrypt=true;trustServerCertificate=true";

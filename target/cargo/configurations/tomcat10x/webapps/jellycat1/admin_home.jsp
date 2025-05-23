@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.*, Beans.Products, Utils.DBProduct" %>
+<%@ page import="Beans.Products" %>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -42,7 +43,10 @@
                 </div>
                 <!-- Secondary Nav -->
                 <div class="hidden md:flex items-center space-x-1">
-                    <a class="py-2 px-3 bg-orange-500 text-white rounded-full" href="SignInUp">Logout</a>
+                    <form action="SignInUp" method="post">
+                        <input type="hidden" name="action" value="logout">
+                        <button type="submit" class="py-2 px-3 bg-orange-500 text-white rounded-full">Logout</button>
+                    </form>
                 </div>
                 <!-- Mobile Button -->
                 <div class="md:hidden flex items-center">
@@ -53,7 +57,7 @@
             </div>
         </div>
     </nav>
-    
+
     <!-- Mobile Menu -->
     <div class="mobile-menu hidden md:hidden">
         <a class="block py-2 px-4 text-sm" href="Product" id="mobile-nav-products">Products</a>
@@ -61,12 +65,40 @@
         <a class="block py-2 px-4 text-sm" href="Customer" id="mobile-nav-customers">Customers</a>
         <a class="block py-2 px-4 text-sm" href="Statistical" id="mobile-nav-statistics">Statistics</a>
         <a class="block py-2 px-4 text-sm" href="Category" id="mobile-nav-category">Category</a>
+        <form action="SignInUp" method="post">
+            <input type="hidden" name="action" value="logout">
+            <button type="submit" class="block py-2 px-4 text-sm text-white bg-orange-500">Logout</button>
+        </form>
     </div>
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-6" id="main-content">
         <!-- Products Section -->
         <h1 class="text-3xl font-bold mb-6">Products</h1>
-        
+
+        <%
+            String status = request.getParameter("status");
+            if (status != null) {
+                String message = "";
+                String bgColor = "bg-green-600";
+                if (status.equals("add_success")) {
+                    message = "Thêm sản phẩm thành công!";
+                } else if (status.equals("edit_success")) {
+                    message = "Cập nhật sản phẩm thành công!";
+                } else if (status.equals("error")) {
+                    message = "Có lỗi xảy ra. Vui lòng thử lại.";
+                    bgColor = "bg-red-600";
+                }
+                if (!message.isEmpty()) {
+        %>
+        <div class="<%= bgColor %> text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
+            <i class="fas fa-<%= status.equals("error") ? "exclamation-circle" : "check-circle" %> text-xl"></i>
+            <span><%= message %></span>
+        </div>
+        <%
+                }
+            }
+        %>
+
         <div class="flex justify-between mb-4">
             <button class="bg-orange-500 text-white px-4 py-2 rounded" onclick="addProduct()">Thêm Sản Phẩm</button>
             <div class="relative">
@@ -77,25 +109,26 @@
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="product-list">
-            <!-- Product Cards will be inserted here dynamically -->
             <%
                 List<Products> productList = (List<Products>) request.getAttribute("productList");
                 if (productList != null) {
                     for (Products product : productList) {
             %>
-                        <div class="bg-white p-6 rounded-lg shadow-lg">
-						    <img alt="Product Image" class="w-full h-80 object-cover mb-4 rounded" src="data:image/jpeg;base64,<%= new String(java.util.Base64.getEncoder().encode(product.getImage())) %>" />
-						    <h2 class="text-xl font-bold mb-2"><%= product.getName() %></h2>
-						    <p class="text-gray-700 mb-4"><%= product.getDescription() %></p>
-						    <div class="flex justify-between items-center">
-						        <span class="text-gray-900 font-bold"><%= (int) product.getPrice() %></span>
-						        <div class="flex space-x-2">
-						            <button class="bg-orange-500 text-white px-3 py-1 rounded" onclick="editProduct(<%= product.getProductId() %>)">Sửa</button>
-						            <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="deleteProduct(<%= product.getProductId() %>)">Xóa</button>
-						        </div>
-						    </div>
-						</div>
-
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <img alt="Product Image" class="w-full h-80 object-cover mb-4 rounded"
+                     src="data:image/jpeg;base64,<%= java.util.Base64.getEncoder().encodeToString(product.getImage()) %>" />
+                <h2 class="text-xl font-bold mb-2"><%= product.getName() %></h2>
+                <p class="text-gray-700 mb-4"><%= product.getDescription() %></p>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-900 font-bold"><%= (int) product.getPrice() %> VND</span>
+                    <div class="flex space-x-2">
+                        <button class="bg-orange-500 text-white px-3 py-1 rounded"
+                                onclick="editProduct(<%= product.getProductId() %>)">Sửa</button>
+                        <button class="bg-red-500 text-white px-3 py-1 rounded"
+                                onclick="deleteProduct(<%= product.getProductId() %>)">Xóa</button>
+                    </div>
+                </div>
+            </div>
             <%
                     }
                 }

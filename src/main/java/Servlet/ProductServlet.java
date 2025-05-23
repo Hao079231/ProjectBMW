@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +33,29 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String action = request.getParameter("action");
         String productId = request.getParameter("productId");
         String searchQuery = request.getParameter("search");
+        String remoteIp = request.getRemoteAddr();
 
-        logger.info("Received GET request with action: {}, productId: {}, searchQuery: {}", action, productId, searchQuery);
+        logger.info("Received GET request from IP: {}, action: {}, productId: {}, searchQuery: {}",
+                remoteIp, action, productId, searchQuery);
+
+        // Kiểm tra quyền truy cập
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            logger.warn("Unauthorized access attempt from IP: {} to GET /Product, action: {}", remoteIp, action);
+            response.sendRedirect("signinup.jsp?status=login_required");
+            return;
+        }
+        Beans.Users user = (Beans.Users) session.getAttribute("user");
+        if (!"admin".equals(user.getRole())) {
+            logger.warn("Non-admin user (role: {}, username: {}) attempted to access GET /Product, action: {}",
+                    user.getRole(), user.getUsername(), action);
+            response.sendRedirect("error.jsp?message=AccessDenied");
+            return;
+        }
 
         if (action == null) {
             action = "";
@@ -57,6 +75,11 @@ public class ProductServlet extends HttpServlet {
                 if (productId != null && !productId.isEmpty()) {
                     logger.debug("Fetching product with ID: {}", productId);
                     Products product = dbProduct.getProductById(Integer.parseInt(productId));
+                    if (product == null) {
+                        logger.warn("Product not found for ID: {}", productId);
+                        response.sendRedirect("Product?status=error");
+                        return;
+                    }
                     request.setAttribute("product", product);
                     List<Categories> categoriesList = DBCategories.getAllCategories();
                     request.setAttribute("categoriesList", categoriesList);
@@ -93,18 +116,35 @@ public class ProductServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            logger.error("Error processing GET request with action: {}, productId: {}, searchQuery: {}", action, productId, searchQuery, e);
+            logger.error("Error processing GET request with action: {}, productId: {}, searchQuery: {}",
+                    action, productId, searchQuery, e);
             throw new ServletException("Error processing request", e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String action = request.getParameter("action");
         String productId = request.getParameter("productId");
+        String remoteIp = request.getRemoteAddr();
 
-        logger.info("Received POST request with action: {}, productId: {}", action, productId);
+        logger.info("Received POST request from IP: {}, action: {}, productId: {}", remoteIp, action, productId);
+
+        // Kiểm tra quyền truy cập
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            logger.warn("Unauthorized access attempt from IP: {} to POST /Product, action: {}", remoteIp, action);
+            response.sendRedirect("signinup.jsp?status=login_required");
+            return;
+        }
+        Beans.Users user = (Beans.Users) session.getAttribute("user");
+        if (!"admin".equals(user.getRole())) {
+            logger.warn("Non-admin user (role: {}, username: {}) attempted to access POST /Product, action: {}",
+                    user.getRole(), user.getUsername(), action);
+            response.sendRedirect("error.jsp?message=AccessDenied");
+            return;
+        }
 
         try (Connection conn = DBConnection.getConnection()) {
             DBProduct dbProduct = new DBProduct(conn);
@@ -119,19 +159,43 @@ public class ProductServlet extends HttpServlet {
             String categoryIdStr = request.getParameter("categoryId");
             String statusStr = request.getParameter("status");
 
-            logger.debug("Processing product data: name={}, price={}, categoryId={}", name, priceStr, categoryIdStr);
+            logger.debug("Processing product data: name={}, price={}, stock={}, categoryId={}",
+                    name, priceStr, stockStr, categoryIdStr);
+
+            // Kiểm tra giá trị đầu vào
+            if (name == null || name.trim().isEmpty() || description == null || description.trim().isEmpty() ||
+                    priceStr == null || stockStr == null || categoryIdStr == null || statusStr == null) {
+                logger.warn("Missing required fields in form data from IP: {}", remoteIp);
+                response.sendRedirect(action.equals("add") ? "addProduct.jsp?status=missing_fields" :
+                        "editProduct.jsp?status=missing_fields&productId=" + productId);
+                return;
+            }
 
             try {
+                int price = Integer.parseInt(priceStr);
+                int stock = Integer.parseInt(stockStr);
+                int categoryId = Integer.parseInt(categoryIdStr);
+
+                // Kiểm tra giá và số lượng tồn kho âm
+                if (price < 0 || stock < 0) {
+                    logger.warn("Invalid price: {} or stock: {} from IP: {}", price, stock, remoteIp);
+                    response.sendRedirect(action.equals("add") ? "addProduct.jsp?status=invalid_values" :
+                            "editProduct.jsp?status=invalid_values&productId=" + productId);
+                    return;
+                }
+
                 product.setName(name);
                 product.setDescription(description);
-                product.setPrice(Integer.parseInt(priceStr));
+                product.setPrice(price);
                 product.setSize(size);
-                product.setStock(Integer.parseInt(stockStr));
-                product.setCategoryId(Integer.parseInt(categoryIdStr));
+                product.setStock(stock);
+                product.setCategoryId(categoryId);
                 product.setStatus(Boolean.parseBoolean(statusStr));
             } catch (NumberFormatException e) {
-                logger.warn("Invalid number format in form data: price={}, stock={}, categoryId={}", priceStr, stockStr, categoryIdStr);
-                response.sendRedirect("addProduct.jsp?status=error");
+                logger.warn("Invalid number format in form data: price={}, stock={}, categoryId={} from IP: {}",
+                        priceStr, stockStr, categoryIdStr, remoteIp);
+                response.sendRedirect(action.equals("add") ? "addProduct.jsp?status=invalid_format" :
+                        "editProduct.jsp?status=invalid_format&productId=" + productId);
                 return;
             }
 
@@ -143,14 +207,20 @@ public class ProductServlet extends HttpServlet {
                 byte[] imageBytes = imageInputStream.readAllBytes();
                 product.setImage(imageBytes);
                 logger.info("Image uploaded successfully, size: {} bytes", imageBytes.length);
+            } else if (action.equals("edit")) {
+                // Giữ ảnh cũ nếu không tải ảnh mới khi chỉnh sửa
+                Products existingProduct = dbProduct.getProductById(Integer.parseInt(productId));
+                if (existingProduct != null) {
+                    product.setImage(existingProduct.getImage());
+                }
             }
 
             if (productId != null && !productId.isEmpty()) {
                 try {
                     product.setProductId(Integer.parseInt(productId));
                 } catch (NumberFormatException e) {
-                    logger.warn("Invalid product ID format: {}", productId);
-                    response.sendRedirect("addProduct.jsp?status=error");
+                    logger.warn("Invalid product ID format: {} from IP: {}", productId, remoteIp);
+                    response.sendRedirect("editProduct.jsp?status=invalid_format&productId=" + productId);
                     return;
                 }
             }
@@ -159,21 +229,24 @@ public class ProductServlet extends HttpServlet {
                 logger.info("Adding new product: {}", name);
                 dbProduct.addProduct(product);
                 logger.info("Successfully added product: {}", name);
+                response.sendRedirect("Product?status=add_success");
             } else if (action.equals("edit")) {
                 logger.info("Updating product ID: {}", productId);
                 dbProduct.updateProduct(product);
                 logger.info("Successfully updated product ID: {}", productId);
+                response.sendRedirect("Product?status=edit_success");
             } else {
-                logger.warn("Invalid action: {}", action);
-                response.sendRedirect("addProduct.jsp?status=error");
+                logger.warn("Invalid action: {} from IP: {}", action, remoteIp);
+                response.sendRedirect(action.equals("add") ? "addProduct.jsp?status=invalid_action" :
+                        "editProduct.jsp?status=invalid_action&productId=" + productId);
                 return;
             }
 
-            response.sendRedirect("Product");
-
         } catch (Exception e) {
-            logger.error("Error processing POST request with action: {}, productId: {}", action, productId, e);
-            response.sendRedirect("addProduct.jsp?status=error");
+            logger.error("Error processing POST request with action: {}, productId: {} from IP: {}",
+                    action, productId, remoteIp, e);
+            response.sendRedirect(action.equals("add") ? "addProduct.jsp?status=error" :
+                    "editProduct.jsp?status=error&productId=" + productId);
         }
     }
 }

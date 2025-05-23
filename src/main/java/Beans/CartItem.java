@@ -38,7 +38,7 @@ public class CartItem {
     }
 
     public double getPrice() {
-        return product != null ? product.getPrice() : 0.0; 
+        return product != null ? product.getPrice() : 0.0;
     }
 
     // Tăng số lượng sản phẩm
@@ -46,6 +46,5 @@ public class CartItem {
         this.quantity++;
     }
     public double getTotal() {
-        return product.getPrice() * quantity; 
-    }
-}
+        return (quantity >= 1 && quantity <= 100) ? product.getPrice() * quantity : 0;
+    }}
