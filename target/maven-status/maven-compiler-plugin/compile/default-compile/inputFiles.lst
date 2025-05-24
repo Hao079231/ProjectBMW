@@ -10,6 +10,7 @@ F:\HK6\BMW\5\ProjectBMW\src\main\java\Beans\SQLServerConnection.java
 F:\HK6\BMW\5\ProjectBMW\src\main\java\Beans\Statistical.java
 F:\HK6\BMW\5\ProjectBMW\src\main\java\Beans\Users.java
 F:\HK6\BMW\5\ProjectBMW\src\main\java\Config\CSRFTokenFilter.java
+F:\HK6\BMW\5\ProjectBMW\src\main\java\Config\SecurityHeaderFilter.java
 F:\HK6\BMW\5\ProjectBMW\src\main\java\Servlet\CartServlet.java
 F:\HK6\BMW\5\ProjectBMW\src\main\java\Servlet\CategoryServlet.java
 F:\HK6\BMW\5\ProjectBMW\src\main\java\Servlet\CustomerOrderServlet.java
