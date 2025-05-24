@@ -7,6 +7,7 @@ Beans\Users.class
 Servlet\UserCategoryServlet.class
 Beans\DBConnection.class
 Utils\DBOrderDetail.class
+Config\SecurityHeaderFilter.class
 Servlet\ProductServlet.class
 Servlet\OrderServlet.class
 Servlet\UserServlet.class
