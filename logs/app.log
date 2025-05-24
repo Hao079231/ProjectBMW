@@ -869,3 +869,45 @@
 2025-05-23 23:39:03 [http-nio-8181-exec-2] INFO  Servlet.CustomerOrderServlet - Database connection established
 2025-05-23 23:39:03 [http-nio-8181-exec-2] INFO  Servlet.CustomerOrderServlet - Fetching order list for customer ID: 1
 2025-05-23 23:39:04 [http-nio-8181-exec-2] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrders.jsp
+2025-05-24 17:07:43 [http-nio-8181-exec-2] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: B254CFD7531FD6B8796C668945282EEC, IP: 0:0:0:0:0:0:0:1
+2025-05-24 17:07:43 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-24 17:07:44 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-24 17:07:48 [http-nio-8181-exec-5] INFO  Servlet.SignInUpServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: null
+2025-05-24 17:07:53 [http-nio-8181-exec-9] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: B254CFD7531FD6B8796C668945282EEC
+2025-05-24 17:07:53 [http-nio-8181-exec-9] INFO  Servlet.SignInUpServlet - POST request received from IP: 0:0:0:0:0:0:0:1, action: signin
+2025-05-24 17:07:53 [http-nio-8181-exec-9] INFO  Servlet.SignInUpServlet - Signin successful from IP: 0:0:0:0:0:0:0:1, username: sang, role: user
+2025-05-24 17:07:53 [http-nio-8181-exec-10] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-24 17:07:53 [http-nio-8181-exec-10] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-24 17:07:57 [http-nio-8181-exec-2] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-24 17:07:57 [http-nio-8181-exec-2] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-24 17:07:57 [http-nio-8181-exec-2] INFO  Servlet.CustomerOrderServlet - Fetching order list for customer ID: 2
+2025-05-24 17:07:57 [http-nio-8181-exec-2] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrders.jsp
+2025-05-24 17:07:59 [http-nio-8181-exec-6] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-24 17:07:59 [http-nio-8181-exec-6] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-24 17:07:59 [http-nio-8181-exec-6] INFO  Servlet.CustomerOrderServlet - Fetching order details for order ID: 2
+2025-05-24 17:08:00 [http-nio-8181-exec-6] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrderDetail.jsp
+2025-05-24 17:08:01 [http-nio-8181-exec-8] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: B254CFD7531FD6B8796C668945282EEC
+2025-05-24 17:08:01 [http-nio-8181-exec-8] INFO  Servlet.ReviewServlet - Received POST request with action: check
+2025-05-24 17:08:01 [http-nio-8181-exec-8] INFO  Servlet.ReviewServlet - Product ID: 2 already reviewed by user ID: 2, order ID: 2
+2025-05-24 17:08:04 [http-nio-8181-exec-10] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-24 17:08:05 [http-nio-8181-exec-10] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-24 17:08:05 [http-nio-8181-exec-10] INFO  Servlet.CustomerOrderServlet - Fetching order list for customer ID: 2
+2025-05-24 17:08:05 [http-nio-8181-exec-10] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrders.jsp
+2025-05-24 17:08:07 [http-nio-8181-exec-5] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-24 17:08:07 [http-nio-8181-exec-5] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-24 17:08:07 [http-nio-8181-exec-5] INFO  Servlet.CustomerOrderServlet - Fetching order details for order ID: 4
+2025-05-24 17:08:07 [http-nio-8181-exec-5] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrderDetail.jsp
+2025-05-24 17:08:08 [http-nio-8181-exec-6] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: B254CFD7531FD6B8796C668945282EEC
+2025-05-24 17:08:08 [http-nio-8181-exec-6] INFO  Servlet.ReviewServlet - Received POST request with action: check
+2025-05-24 17:08:23 [http-nio-8181-exec-9] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: B254CFD7531FD6B8796C668945282EEC
+2025-05-24 17:08:23 [http-nio-8181-exec-9] INFO  Servlet.ReviewServlet - Received POST request with action: submit
+2025-05-24 17:08:23 [http-nio-8181-exec-9] INFO  Servlet.ReviewServlet - Processing review submission for user ID: 2, product ID: 5, order ID: 4
+2025-05-24 17:08:23 [http-nio-8181-exec-9] WARN  Servlet.ReviewServlet - Dangerous input detected in comment: <script>alert('XSS');</script> 
+2025-05-24 17:08:26 [http-nio-8181-exec-10] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-24 17:08:27 [http-nio-8181-exec-10] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-24 17:08:27 [http-nio-8181-exec-10] INFO  Servlet.CustomerOrderServlet - Fetching order list for customer ID: 2
+2025-05-24 17:08:27 [http-nio-8181-exec-10] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrders.jsp
+2025-05-24 17:08:30 [http-nio-8181-exec-4] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-24 17:08:30 [http-nio-8181-exec-4] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-24 17:08:41 [http-nio-8181-exec-8] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-24 17:08:41 [http-nio-8181-exec-8] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products

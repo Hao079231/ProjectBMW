@@ -30,6 +30,14 @@ public class ReviewServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Content-Security-Policy",
+                "default-src 'self'; " +
+                        "script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; " +
+                        "style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; " +
+                        "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; " +
+                        "img-src 'self' data:; " +
+                        "object-src 'none'; " +
+                        "base-uri 'none';");
         String action = request.getParameter("action");
         if (action == null) {
             action = "check";  // Mặc định là "check"
