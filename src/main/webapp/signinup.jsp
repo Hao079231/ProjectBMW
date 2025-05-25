@@ -71,6 +71,9 @@
                         <input type="password" name="password" placeholder="Password"
                             class="w-full p-2 mb-4 border border-gray-300 rounded">
                         <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded">SIGN IN</button>
+                        <div class="text-center mt-4">
+                            <a href="forgot_password.jsp" class="text-orange-500 hover:text-orange-700">Forgot password?</a>
+                        </div>
                     </form>
                 </div>
 
