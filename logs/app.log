@@ -1110,3 +1110,51 @@
 2025-05-24 18:32:20 [http-nio-8181-exec-7] INFO  Servlet.SignInUpServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: null
 2025-05-24 18:32:23 [http-nio-8181-exec-8] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
 2025-05-24 18:32:24 [http-nio-8181-exec-8] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:11:02 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: 617E1BE0DF269695A4D28EA359AC05C6, IP: 0:0:0:0:0:0:0:1
+2025-05-25 22:11:02 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:11:04 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:15:54 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: A79CE470BA68912BEB5A3EF5992CBAF0, IP: 0:0:0:0:0:0:0:1
+2025-05-25 22:15:54 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:15:57 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:16:15 [http-nio-8181-exec-4] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:16:15 [http-nio-8181-exec-4] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:16:32 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:16:33 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:16:36 [http-nio-8181-exec-8] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-25 22:16:36 [http-nio-8181-exec-8] WARN  Servlet.CustomerOrderServlet - No user found in session
+2025-05-25 22:17:02 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:17:03 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:17:05 [http-nio-8181-exec-1] INFO  Servlet.ProductByCategoryServlet - Received request for products with categoryId: 1
+2025-05-25 22:17:06 [http-nio-8181-exec-1] INFO  Servlet.ProductByCategoryServlet - Successfully retrieved 10 products for category ID: 1
+2025-05-25 22:17:09 [http-nio-8181-exec-4] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:17:09 [http-nio-8181-exec-4] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:23:49 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: 30E51ED00CE88EF5A5221626421DB042, IP: 0:0:0:0:0:0:0:1
+2025-05-25 22:23:56 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:23:57 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:29:47 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: 717D4E04D453B984F732C7B2BEAAE83E, IP: 0:0:0:0:0:0:0:1
+2025-05-25 22:29:47 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:29:49 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:29:55 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:29:55 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:31:33 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: B75FCFB2F37B153DA170CF97CE11B898, IP: 0:0:0:0:0:0:0:1
+2025-05-25 22:31:33 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:31:34 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:31:37 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:31:37 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:31:39 [http-nio-8181-exec-3] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:31:39 [http-nio-8181-exec-3] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:31:40 [http-nio-8181-exec-4] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:31:40 [http-nio-8181-exec-4] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:31:41 [http-nio-8181-exec-5] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:31:41 [http-nio-8181-exec-5] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:31:42 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:31:42 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:35:51 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: 59D3700E4197877FA7DEB8350D4FC77F, IP: 0:0:0:0:0:0:0:1
+2025-05-25 22:35:51 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:35:53 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:41:30 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: C27C57FE19B0C7723990342C38D8A4CF, IP: 0:0:0:0:0:0:0:1
+2025-05-25 22:41:30 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:41:31 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 22:45:26 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: D16CC14664940AB9139200937C49A9C4, IP: 0:0:0:0:0:0:0:1
+2025-05-25 22:45:26 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 22:45:28 [http-nio-8181-exec-1] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
