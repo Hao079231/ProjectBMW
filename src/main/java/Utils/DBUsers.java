@@ -11,7 +11,7 @@ import java.util.List;
 import Beans.Users;
 
 public class DBUsers {
-	// Thêm người dùng
+    // Thêm người dùng
     public static void insert(Connection conn, Users user) {
         String query = "INSERT INTO Users (username, password, email, phone, address, role) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
@@ -27,7 +27,7 @@ public class DBUsers {
             e.printStackTrace();
         }
     }
- // Lấy thông tin người dùng theo userId
+    // Lấy thông tin người dùng theo userId
     public static Users getUserById(Connection conn, int userId) {
         String sql = "SELECT * FROM Users WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -35,13 +35,13 @@ public class DBUsers {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Users(
-                            rs.getInt("user_id"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("role")
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("role")
                     );
                 }
             }
@@ -56,17 +56,17 @@ public class DBUsers {
         List<Users> usersList = new ArrayList<>();
         String sql = "SELECT * FROM Users WHERE role = 'user'";
         try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+            ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Users user = new Users(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("phone"),
-                        rs.getString("address"),
-                        rs.getString("role")
+                    rs.getInt("user_id"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("address"),
+                    rs.getString("role")
                 );
                 usersList.add(user);
             }
@@ -116,13 +116,13 @@ public class DBUsers {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Users(
-                            rs.getInt("user_id"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("role")
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("role")
                     );
                 }
             }
@@ -139,13 +139,13 @@ public class DBUsers {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Users(
-                            rs.getInt("user_id"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("role")
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("role")
                     );
                 }
             }
@@ -155,7 +155,7 @@ public class DBUsers {
         }
         return null; // Trả về null nếu không tìm thấy người dùng
     }
- // Tìm kiếm người dùng theo tên
+    // Tìm kiếm người dùng theo tên
     public static List<Users> searchUsersByUsername(Connection conn, String searchQuery) {
         List<Users> usersList = new ArrayList<>();
         String sql = "SELECT * FROM Users WHERE role = 'user' AND username LIKE ?";
@@ -164,13 +164,13 @@ public class DBUsers {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Users user = new Users(
-                            rs.getInt("user_id"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("role")
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("role")
                     );
                     usersList.add(user);
                 }
@@ -180,6 +180,35 @@ public class DBUsers {
             e.printStackTrace();
         }
         return usersList;
+    }
+
+    // Get all emails for validation
+    public static List<String> getAllEmail(Connection conn) {
+        List<String> emails = new ArrayList<>();
+        String sql = "SELECT email FROM Users";
+        try (Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                emails.add(rs.getString("email"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting emails: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return emails;
+    }
+
+    // Update user password by email
+    public static void updateUserPasswordByEmail(Connection conn, String password, String email) {
+        String sql = "UPDATE Users SET password = ? WHERE email = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, password);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error updating password: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }
