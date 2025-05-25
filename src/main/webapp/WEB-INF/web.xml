@@ -163,4 +163,14 @@
     <servlet-name>UserServlet</servlet-name>
     <url-pattern>/UserServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>Servlet for handling password reset functionality</description>
+    <display-name>ChangePasswordServlet</display-name>
+    <servlet-name>ChangePasswordServlet</servlet-name>
+    <servlet-class>Servlet.ChangePasswordServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChangePasswordServlet</servlet-name>
+    <url-pattern>/ChangePasswordServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

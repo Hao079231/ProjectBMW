@@ -182,5 +182,34 @@ public class DBUsers {
         return usersList;
     }
 
+    // Get all emails for validation
+    public static List<String> getAllEmail(Connection conn) {
+        List<String> emails = new ArrayList<>();
+        String sql = "SELECT email FROM Users";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                emails.add(rs.getString("email"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting emails: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return emails;
+    }
+
+    // Update user password by email
+    public static void updateUserPasswordByEmail(Connection conn, String password, String email) {
+        String sql = "UPDATE Users SET password = ? WHERE email = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, password);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error updating password: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }
 
