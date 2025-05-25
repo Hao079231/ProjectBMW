@@ -46,11 +46,13 @@
 
     <!-- Navigation Buttons -->
     <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2 rounded-l-md hover:bg-gray-600">
-        ‹
+        &#8249; <!-- Left Arrow -->
     </button>
     <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2 rounded-r-md hover:bg-gray-600">
-        ›
+        &#8250; <!-- Right Arrow -->
     </button>
 </div>
+<!-- Link external JavaScript -->
+<script src="js/script.js"></script>
 </body>
 </html>
