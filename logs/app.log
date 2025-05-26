@@ -1110,3 +1110,60 @@
 2025-05-24 18:32:20 [http-nio-8181-exec-7] INFO  Servlet.SignInUpServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: null
 2025-05-24 18:32:23 [http-nio-8181-exec-8] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
 2025-05-24 18:32:24 [http-nio-8181-exec-8] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 21:42:57 [http-nio-8181-exec-2] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: D550A6ABF4B7E37CD6C4A34419B6C3B6, IP: 0:0:0:0:0:0:0:1
+2025-05-25 21:42:57 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 21:43:05 [http-nio-8181-exec-2] ERROR Servlet.ProductListServlet - Error retrieving products with search query: null
+com.microsoft.sqlserver.jdbc.SQLServerException: The TCP/IP connection to the host DESKTOP-1IK6V0J, port 1433 has failed. Error: "DESKTOP-1IK6V0J. Verify the connection properties. Make sure that an instance of SQL Server is running on the host and accepting TCP/IP connections at the port. Make sure that TCP connections to the port are not blocked by a firewall.".
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDriverError(SQLServerException.java:242) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerException.convertConnectExceptionToSQLServerException(SQLServerException.java:308) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SocketFinder.findSocket(IOBuffer.java:2594) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.TDSChannel.open(IOBuffer.java:722) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connectHelper(SQLServerConnection.java:3785) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.login(SQLServerConnection.java:3402) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connectInternal(SQLServerConnection.java:3211) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connect(SQLServerConnection.java:1979) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerDriver.connect(SQLServerDriver.java:1267) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:682) ~[java.sql:?]
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:230) ~[java.sql:?]
+	at Beans.SQLServerConnection.initializeDatabase(SQLServerConnection.java:22) ~[classes/:?]
+	at Beans.DBConnection.getConnection(DBConnection.java:9) ~[classes/:?]
+	at Servlet.ProductListServlet.doGet(ProductListServlet.java:43) ~[classes/:?]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[tomcat-servlet-api-10.1.10.jar:6.0]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-servlet-api-10.1.10.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-websocket-10.1.10.jar:10.1.10]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at Config.CSRFTokenFilter.doFilter(CSRFTokenFilter.java:83) ~[classes/:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341) ~[tomcat-catalina-10.1.10.jar:10.1.10]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391) ~[tomcat-coyote-10.1.10.jar:10.1.10]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-coyote-10.1.10.jar:10.1.10]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:894) ~[tomcat-coyote-10.1.10.jar:10.1.10]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-coyote-10.1.10.jar:10.1.10]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-coyote-10.1.10.jar:10.1.10]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-util-10.1.10.jar:10.1.10]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-util-10.1.10.jar:10.1.10]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-util-10.1.10.jar:10.1.10]
+	at java.base/java.lang.Thread.run(Thread.java:1575) [?:?]
+2025-05-25 21:43:13 [http-nio-8181-exec-6] INFO  Servlet.SignInUpServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: null
+2025-05-25 21:43:13 [http-nio-8181-exec-6] ERROR Servlet.SignInUpServlet - Error retrieving user data from IP: 0:0:0:0:0:0:0:1, error: The TCP/IP connection to the host DESKTOP-1IK6V0J, port 1433 has failed. Error: "DESKTOP-1IK6V0J. Verify the connection properties. Make sure that an instance of SQL Server is running on the host and accepting TCP/IP connections at the port. Make sure that TCP connections to the port are not blocked by a firewall.".
+2025-05-25 21:44:39 [http-nio-8181-exec-2] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: E3C25B78B0713539B646A696A9F26CC0, IP: 0:0:0:0:0:0:0:1
+2025-05-25 21:44:39 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 21:44:40 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 21:44:44 [http-nio-8181-exec-4] INFO  Servlet.SignInUpServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: null
+2025-05-25 21:46:31 [http-nio-8181-exec-2] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: E60273DE159136D3C65F327ADE478D35, IP: 0:0:0:0:0:0:0:1
+2025-05-25 21:46:31 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 21:46:32 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-25 21:46:35 [http-nio-8181-exec-4] INFO  Servlet.SignInUpServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: null
+2025-05-25 21:52:15 [http-nio-8181-exec-3] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: 9CA415FCC35FA468FA179BA83FCBD377, IP: 0:0:0:0:0:0:0:1
+2025-05-25 21:52:15 [http-nio-8181-exec-3] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-25 21:52:15 [http-nio-8181-exec-3] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
