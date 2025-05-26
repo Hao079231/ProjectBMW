@@ -1,0 +1,157 @@
+2025-05-26 21:11:41 [http-nio-8181-exec-3] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: 84F352A9ED7C63AEA766A0F07EDD38B4, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:11:41 [http-nio-8181-exec-3] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:11:44 [http-nio-8181-exec-3] ERROR Servlet.ProductListServlet - Error retrieving products with search query: null
+com.microsoft.sqlserver.jdbc.SQLServerException: The TCP/IP connection to the host DESKTOP-1IK6V0J, port 1433 has failed. Error: "DESKTOP-1IK6V0J. Verify the connection properties. Make sure that an instance of SQL Server is running on the host and accepting TCP/IP connections at the port. Make sure that TCP connections to the port are not blocked by a firewall.".
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDriverError(SQLServerException.java:242) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerException.convertConnectExceptionToSQLServerException(SQLServerException.java:308) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SocketFinder.findSocket(IOBuffer.java:2594) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.TDSChannel.open(IOBuffer.java:722) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connectHelper(SQLServerConnection.java:3785) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.login(SQLServerConnection.java:3402) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connectInternal(SQLServerConnection.java:3211) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connect(SQLServerConnection.java:1979) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerDriver.connect(SQLServerDriver.java:1267) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:682) ~[java.sql:?]
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:230) ~[java.sql:?]
+	at Beans.SQLServerConnection.initializeDatabase(SQLServerConnection.java:22) ~[classes/:?]
+	at Beans.DBConnection.getConnection(DBConnection.java:9) ~[classes/:?]
+	at Servlet.ProductListServlet.doGet(ProductListServlet.java:43) ~[classes/:?]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[servlet-api.jar:6.0]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[servlet-api.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[catalina.jar:10.1.41]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-websocket.jar:10.1.41]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[catalina.jar:10.1.41]
+	at Config.CSRFTokenFilter.doFilter(CSRFTokenFilter.java:83) ~[classes/:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:666) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[catalina.jar:10.1.41]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189) ~[tomcat-util.jar:10.1.41]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658) ~[tomcat-util.jar:10.1.41]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-util.jar:10.1.41]
+	at java.base/java.lang.Thread.run(Thread.java:1570) [?:?]
+2025-05-26 21:16:48 [http-nio-8181-exec-3] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: A3945A01F3E1FF644A587123FABBF037, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:16:48 [http-nio-8181-exec-3] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:16:51 [http-nio-8181-exec-3] ERROR Servlet.ProductListServlet - Error retrieving products with search query: null
+com.microsoft.sqlserver.jdbc.SQLServerException: The TCP/IP connection to the host DESKTOP-1IK6V0J, port 1433 has failed. Error: "DESKTOP-1IK6V0J. Verify the connection properties. Make sure that an instance of SQL Server is running on the host and accepting TCP/IP connections at the port. Make sure that TCP connections to the port are not blocked by a firewall.".
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDriverError(SQLServerException.java:242) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerException.convertConnectExceptionToSQLServerException(SQLServerException.java:308) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SocketFinder.findSocket(IOBuffer.java:2594) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.TDSChannel.open(IOBuffer.java:722) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connectHelper(SQLServerConnection.java:3785) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.login(SQLServerConnection.java:3402) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connectInternal(SQLServerConnection.java:3211) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.connect(SQLServerConnection.java:1979) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerDriver.connect(SQLServerDriver.java:1267) ~[mssql-jdbc-12.8.0.jre11.jar:?]
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:682) ~[java.sql:?]
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:230) ~[java.sql:?]
+	at Beans.SQLServerConnection.initializeDatabase(SQLServerConnection.java:22) ~[classes/:?]
+	at Beans.DBConnection.getConnection(DBConnection.java:9) ~[classes/:?]
+	at Servlet.ProductListServlet.doGet(ProductListServlet.java:43) ~[classes/:?]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[servlet-api.jar:6.0]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[servlet-api.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[catalina.jar:10.1.41]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-websocket.jar:10.1.41]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[catalina.jar:10.1.41]
+	at Config.CSRFTokenFilter.doFilter(CSRFTokenFilter.java:83) ~[classes/:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:666) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[catalina.jar:10.1.41]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[catalina.jar:10.1.41]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-coyote.jar:10.1.41]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189) ~[tomcat-util.jar:10.1.41]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658) ~[tomcat-util.jar:10.1.41]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-util.jar:10.1.41]
+	at java.base/java.lang.Thread.run(Thread.java:1570) [?:?]
+2025-05-26 21:32:41 [http-nio-8181-exec-3] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: B890EA573E65EDAB3B2FCCEE89D72D6A, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:32:41 [http-nio-8181-exec-3] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:32:42 [http-nio-8181-exec-3] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:32:47 [http-nio-8181-exec-5] INFO  Servlet.SignInUpServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: null
+2025-05-26 21:32:49 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:32:49 [http-nio-8181-exec-6] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:37:24 [http-nio-8181-exec-2] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: C2AD4193D1F3C3087B9EB74D44FAC34B, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:37:24 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:37:25 [http-nio-8181-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:38:35 [https-openssl-nio-8282-exec-9] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:38:35 [https-openssl-nio-8282-exec-9] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:40:26 [https-openssl-nio-8282-exec-3] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: 2A58732E5022C5BF322F69857AADB82B, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:40:26 [https-openssl-nio-8282-exec-3] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:40:26 [https-openssl-nio-8282-exec-3] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:40:59 [https-openssl-nio-8282-exec-4] INFO  Servlet.SignInUpServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: null
+2025-05-26 21:41:04 [https-openssl-nio-8282-exec-5] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: 2A58732E5022C5BF322F69857AADB82B
+2025-05-26 21:41:04 [https-openssl-nio-8282-exec-5] INFO  Servlet.SignInUpServlet - POST request received from IP: 0:0:0:0:0:0:0:1, action: signin
+2025-05-26 21:41:04 [https-openssl-nio-8282-exec-5] INFO  Servlet.SignInUpServlet - Signin successful from IP: 0:0:0:0:0:0:0:1, username: trunghao, role: user
+2025-05-26 21:41:05 [https-openssl-nio-8282-exec-6] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:41:05 [https-openssl-nio-8282-exec-6] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:43:30 [http-nio-8181-exec-1] INFO  Config.CSRFTokenFilter - Generated new CSRF token for session: D17089D784B9E9B16FE86A16F5AA029D, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:43:30 [http-nio-8181-exec-1] WARN  Config.CSRFTokenFilter - CSRF token validation failed for IP: 0:0:0:0:0:0:0:1, session: D17089D784B9E9B16FE86A16F5AA029D, token: null
+2025-05-26 21:44:29 [https-openssl-nio-8282-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:44:30 [https-openssl-nio-8282-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:44:32 [https-openssl-nio-8282-exec-7] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: 2A58732E5022C5BF322F69857AADB82B
+2025-05-26 21:44:32 [https-openssl-nio-8282-exec-7] INFO  Servlet.CartServlet - POST request received from IP: 0:0:0:0:0:0:0:1, action: add
+2025-05-26 21:44:32 [https-openssl-nio-8282-exec-7] INFO  Servlet.CartServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: add
+2025-05-26 21:44:32 [https-openssl-nio-8282-exec-7] INFO  Servlet.CartServlet - New cart created for session: 2A58732E5022C5BF322F69857AADB82B, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:44:32 [https-openssl-nio-8282-exec-7] WARN  Servlet.CartServlet - Invalid quantity: 1 for product ID: 2, stock: -2, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:44:37 [https-openssl-nio-8282-exec-10] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:44:38 [https-openssl-nio-8282-exec-10] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:44:40 [https-openssl-nio-8282-exec-1] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: 2A58732E5022C5BF322F69857AADB82B
+2025-05-26 21:44:40 [https-openssl-nio-8282-exec-1] INFO  Servlet.CartServlet - POST request received from IP: 0:0:0:0:0:0:0:1, action: add
+2025-05-26 21:44:40 [https-openssl-nio-8282-exec-1] INFO  Servlet.CartServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: add
+2025-05-26 21:44:40 [https-openssl-nio-8282-exec-1] INFO  Servlet.CartServlet - Added product ID: 1 with quantity: 1 to cart, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:45:13 [https-openssl-nio-8282-exec-5] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: 2A58732E5022C5BF322F69857AADB82B
+2025-05-26 21:45:13 [https-openssl-nio-8282-exec-5] INFO  Servlet.CartServlet - POST request received from IP: 0:0:0:0:0:0:0:1, action: remove
+2025-05-26 21:45:13 [https-openssl-nio-8282-exec-5] INFO  Servlet.CartServlet - GET request received from IP: 0:0:0:0:0:0:0:1, action: remove
+2025-05-26 21:45:13 [https-openssl-nio-8282-exec-5] INFO  Servlet.CartServlet - Removed product ID: 1 from cart, IP: 0:0:0:0:0:0:0:1
+2025-05-26 21:45:15 [https-openssl-nio-8282-exec-2] INFO  Servlet.ProductListServlet - Received request for product list with search query: null
+2025-05-26 21:45:15 [https-openssl-nio-8282-exec-2] INFO  Servlet.ProductListServlet - Successfully retrieved 30 products
+2025-05-26 21:45:17 [https-openssl-nio-8282-exec-4] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-26 21:45:17 [https-openssl-nio-8282-exec-4] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-26 21:45:17 [https-openssl-nio-8282-exec-4] INFO  Servlet.CustomerOrderServlet - Fetching order list for customer ID: 9
+2025-05-26 21:45:17 [https-openssl-nio-8282-exec-4] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrders.jsp
+2025-05-26 21:45:19 [https-openssl-nio-8282-exec-8] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-26 21:45:19 [https-openssl-nio-8282-exec-8] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-26 21:45:19 [https-openssl-nio-8282-exec-8] INFO  Servlet.CustomerOrderServlet - Fetching order details for order ID: 15
+2025-05-26 21:45:20 [https-openssl-nio-8282-exec-8] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrderDetail.jsp
+2025-05-26 21:45:21 [https-openssl-nio-8282-exec-7] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-26 21:45:22 [https-openssl-nio-8282-exec-7] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-26 21:45:22 [https-openssl-nio-8282-exec-7] INFO  Servlet.CustomerOrderServlet - Fetching order list for customer ID: 9
+2025-05-26 21:45:22 [https-openssl-nio-8282-exec-7] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrders.jsp
+2025-05-26 21:45:23 [https-openssl-nio-8282-exec-9] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-26 21:45:23 [https-openssl-nio-8282-exec-9] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-26 21:45:23 [https-openssl-nio-8282-exec-9] INFO  Servlet.CustomerOrderServlet - Fetching order details for order ID: 12
+2025-05-26 21:45:23 [https-openssl-nio-8282-exec-9] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrderDetail.jsp
+2025-05-26 21:45:24 [https-openssl-nio-8282-exec-10] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: 2A58732E5022C5BF322F69857AADB82B
+2025-05-26 21:45:24 [https-openssl-nio-8282-exec-10] INFO  Servlet.ReviewServlet - Received POST request with action: check
+2025-05-26 21:45:40 [https-openssl-nio-8282-exec-5] INFO  Config.CSRFTokenFilter - CSRF token validated successfully for IP: 0:0:0:0:0:0:0:1, session: 2A58732E5022C5BF322F69857AADB82B
+2025-05-26 21:45:40 [https-openssl-nio-8282-exec-5] INFO  Servlet.ReviewServlet - Received POST request with action: submit
+2025-05-26 21:45:40 [https-openssl-nio-8282-exec-5] INFO  Servlet.ReviewServlet - Processing review submission for user ID: 9, product ID: 1, order ID: 12
+2025-05-26 21:45:40 [https-openssl-nio-8282-exec-5] INFO  Servlet.ReviewServlet - Review added successfully for product ID: 1, user ID: 9, order ID: 12
+2025-05-26 21:45:43 [https-openssl-nio-8282-exec-6] INFO  Servlet.CustomerOrderServlet - Processing GET request for CustomerOrderServlet
+2025-05-26 21:45:43 [https-openssl-nio-8282-exec-6] INFO  Servlet.CustomerOrderServlet - Database connection established
+2025-05-26 21:45:43 [https-openssl-nio-8282-exec-6] INFO  Servlet.CustomerOrderServlet - Fetching order list for customer ID: 9
+2025-05-26 21:45:43 [https-openssl-nio-8282-exec-6] INFO  Servlet.CustomerOrderServlet - Forwarded to customerOrders.jsp
