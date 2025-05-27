@@ -1,0 +1,11 @@
+.idea
+.metadata
+.settings
+.classpath
+.Smarttomcat
+.project
+target/
+logs/
+RemoteSystemsTempFiles/
+*.iml
+*.log
