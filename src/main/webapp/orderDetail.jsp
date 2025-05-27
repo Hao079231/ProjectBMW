@@ -79,24 +79,24 @@
             <p class="text-gray-700 mb-4">Ngày tạo: <%= request.getAttribute("createdAt") %></p>
             <p class="text-gray-700 mb-4">Ngày cập nhật: <%= request.getAttribute("updatedAt") %></p>
         </div>
-        
+
         <h2 class="text-2xl font-bold mt-6 mb-4">Danh sách sản phẩm</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="order-item-list">
-            <% 
+            <%
                 // Lấy danh sách sản phẩm trong đơn hàng
                 List<OrderItem> orderItems = (List<OrderItem>) request.getAttribute("orderItems");
                 if (orderItems != null) {
                     for (OrderItem item : orderItems) {
             %>
                         <div class="bg-white p-6 rounded-lg shadow-lg">
-                        	<img alt="Product Image" class="w-full h-40 object-cover mb-4 rounded" 
+                        	<img alt="Product Image" class="w-full h-40 object-cover mb-4 rounded"
                                  src="data:image/jpeg;base64,<%= new String(java.util.Base64.getEncoder().encode(item.getImage())) %>" />
                             <h3 class="text-xl font-bold mb-2">Sản phẩm: <%= item.getProductName() %></h3>
                             <p class="text-gray-700 mb-4">Số lượng: <%= item.getQuantity() %></p>
                             <p class="text-gray-700 mb-4">Giá: <%= item.getPrice() %></p>
                             <p class="text-gray-700 mb-4">Tổng: <%= item.getQuantity() * item.getPrice() %></p>
                         </div>
-            <% 
+            <%
                     }
                 }
             %>
