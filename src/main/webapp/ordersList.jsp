@@ -42,9 +42,12 @@
                     </div>
                 </div>
                 <!-- Secondary Nav -->
-                <div class="hidden md:flex items-center space-x-1">
-                    <a class="py-2 px-3 bg-orange-500 text-white rounded-full" href="SignInUp">Logout</a>
-                </div>
+             <form action="SignInUp" method="post" class="hidden md:flex items-center space-x-1">
+                 <input type="hidden" name="action" value="logout">
+                 <button type="submit" class="py-2 px-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
+                     Logout
+                 </button>
+             </form>
                 <!-- Mobile Button -->
                 <div class="md:hidden flex items-center">
                     <button class="mobile-menu-button">
