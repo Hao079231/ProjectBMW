@@ -106,7 +106,7 @@
             <p><strong>Số điện thoại:</strong> <%= user.getPhone() %></p>
             <p><strong>Địa chỉ:</strong> <%= user.getAddress() %></p>
         <% } else { %>
-            <p>Bạn chưa đăng nhập</p>
+            <% response.sendRedirect("signinup.jsp"); %>
         <% } %>
 
         <div class="btn-group">
