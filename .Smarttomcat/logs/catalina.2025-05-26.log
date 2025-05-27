@@ -731,3 +731,110 @@
 26-May-2025 21:46:39.092 INFO [Thread-1] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["https-openssl-nio-8282"]
 26-May-2025 21:46:39.111 INFO [Thread-1] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8181"]
 26-May-2025 21:46:39.112 INFO [Thread-1] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 21:57:12.943 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.1.41
+26-May-2025 21:57:12.950 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 8 2025 12:44:02 UTC
+26-May-2025 21:57:12.951 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.1.41.0
+26-May-2025 21:57:12.951 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+26-May-2025 21:57:12.951 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+26-May-2025 21:57:12.951 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+26-May-2025 21:57:12.951 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-22
+26-May-2025 21:57:12.951 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           22.0.2+9-70
+26-May-2025 21:57:12.952 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+26-May-2025 21:57:12.952 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat
+26-May-2025 21:57:12.952 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         D:\Download\apache-tomcat-10.1.41-windows-x64\apache-tomcat-10.1.41
+26-May-2025 21:57:12.967 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+26-May-2025 21:57:12.967 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+26-May-2025 21:57:12.967 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+26-May-2025 21:57:12.967 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+26-May-2025 21:57:12.967 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+26-May-2025 21:57:12.967 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=D:\Download\apache-tomcat-10.1.41-windows-x64\apache-tomcat-10.1.41
+26-May-2025 21:57:12.968 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat
+26-May-2025 21:57:12.968 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat\temp
+26-May-2025 21:57:12.968 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat\conf\logging.properties
+26-May-2025 21:57:12.968 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+26-May-2025 21:57:12.968 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.3.1.1\lib\idea_rt.jar=51196:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.3.1.1\bin
+26-May-2025 21:57:12.968 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dfile.encoding=UTF-8
+26-May-2025 21:57:12.969 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.stdout.encoding=UTF-8
+26-May-2025 21:57:12.969 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.stderr.encoding=UTF-8
+26-May-2025 21:57:12.975 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [2.0.8] using APR version [1.7.4].
+26-May-2025 21:57:13.001 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.14 4 Jun 2024]
+26-May-2025 21:57:13.340 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8181"]
+26-May-2025 21:57:13.358 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 21:57:13.491 INFO [main] org.apache.tomcat.util.net.AbstractEndpoint.logCertificate Connector [https-openssl-nio-8282], TLS virtual host [_default_], certificate type [RSA] configured from keystore [conf/keystore.jks] using alias [tomcat] with trust store [null]
+26-May-2025 21:57:13.498 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [825] milliseconds
+26-May-2025 21:57:13.547 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+26-May-2025 21:57:13.548 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.1.41]
+26-May-2025 21:57:13.564 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deploying deployment descriptor [D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat\conf\Catalina\localhost\jellycat1.xml]
+26-May-2025 21:57:14.907 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+26-May-2025 21:57:16.088 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deployment of deployment descriptor [D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat\conf\Catalina\localhost\jellycat1.xml] has finished in [2,524] ms
+26-May-2025 21:57:16.093 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8181"]
+26-May-2025 21:57:16.125 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 21:57:16.131 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [2631] milliseconds
+26-May-2025 22:09:39.744 INFO [Thread-1] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8181"]
+26-May-2025 22:09:39.752 INFO [Thread-1] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 22:09:39.758 INFO [Thread-1] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+26-May-2025 22:09:39.805 WARNING [Thread-1] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [jellycat1] registered the JDBC driver [com.microsoft.sqlserver.jdbc.SQLServerDriver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+26-May-2025 22:09:39.830 INFO [Thread-1] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8181"]
+26-May-2025 22:09:39.843 INFO [Thread-1] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 22:09:39.860 INFO [Thread-1] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8181"]
+26-May-2025 22:09:39.862 INFO [Thread-1] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 23:16:17.566 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.1.41
+26-May-2025 23:16:17.571 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 8 2025 12:44:02 UTC
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.1.41.0
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-22
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           22.0.2+9-70
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat
+26-May-2025 23:16:17.572 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         D:\Download\apache-tomcat-10.1.41-windows-x64\apache-tomcat-10.1.41
+26-May-2025 23:16:17.581 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+26-May-2025 23:16:17.581 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+26-May-2025 23:16:17.581 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+26-May-2025 23:16:17.581 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=D:\Download\apache-tomcat-10.1.41-windows-x64\apache-tomcat-10.1.41
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat\temp
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat\conf\logging.properties
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.3.1.1\lib\idea_rt.jar=52706:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.3.1.1\bin
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dfile.encoding=UTF-8
+26-May-2025 23:16:17.582 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.stdout.encoding=UTF-8
+26-May-2025 23:16:17.583 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.stderr.encoding=UTF-8
+26-May-2025 23:16:17.588 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [2.0.8] using APR version [1.7.4].
+26-May-2025 23:16:17.607 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.14 4 Jun 2024]
+26-May-2025 23:16:17.993 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8181"]
+26-May-2025 23:16:18.016 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 23:16:18.172 INFO [main] org.apache.tomcat.util.net.AbstractEndpoint.logCertificate Connector [https-openssl-nio-8282], TLS virtual host [_default_], certificate type [RSA] configured from keystore [conf/keystore.jks] using alias [tomcat] with trust store [null]
+26-May-2025 23:16:18.177 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [898] milliseconds
+26-May-2025 23:16:18.235 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+26-May-2025 23:16:18.235 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.1.41]
+26-May-2025 23:16:18.249 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deploying deployment descriptor [D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat\conf\Catalina\localhost\jellycat1.xml]
+26-May-2025 23:16:19.650 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+26-May-2025 23:16:20.720 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deployment of deployment descriptor [D:\Study\UTE\BaoMatWeb\Test\ProjectBMW\.Smarttomcat\conf\Catalina\localhost\jellycat1.xml] has finished in [2,471] ms
+26-May-2025 23:16:20.724 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8181"]
+26-May-2025 23:16:20.743 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 23:16:20.745 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [2566] milliseconds
+26-May-2025 23:17:31.546 INFO [http-nio-8181-exec-9] org.apache.coyote.http11.Http11Processor.service Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+	java.lang.IllegalArgumentException: Invalid character found in method name [0x160x030x010x020xf20x010x000x020xee0x030x01SC[0x900x9d0x9br0x0b0xbc0x0c0xbc+0x920xa8H0x970xcf0xbd90x040xcc0x160x0a0x850x030x900x9fw0x0430xd40xde0x000x02|0x000x000x000x010x000x020x000x030x000x040x000x050x000x060x000x070x000x080x000x090x000x0a0x000x0b0x000x0c0x000x0d0x000x0e0x000x0f0x000x100x000x110x000x120x000x130x000x140x000x150x000x160x000x170x000x180x000x190x000x1a0x000x1b0x000x1e0x000x1f0x00 ]. HTTP method names must be tokens
+		at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:403)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+		at java.base/java.lang.Thread.run(Thread.java:1570)
+26-May-2025 23:41:16.464 INFO [Thread-1] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8181"]
+26-May-2025 23:41:16.503 INFO [Thread-1] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 23:41:16.511 INFO [Thread-1] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+26-May-2025 23:41:16.600 WARNING [Thread-1] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [jellycat1] registered the JDBC driver [com.microsoft.sqlserver.jdbc.SQLServerDriver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+26-May-2025 23:41:16.673 INFO [Thread-1] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8181"]
+26-May-2025 23:41:16.698 INFO [Thread-1] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["https-openssl-nio-8282"]
+26-May-2025 23:41:16.713 INFO [Thread-1] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8181"]
+26-May-2025 23:41:16.715 INFO [Thread-1] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["https-openssl-nio-8282"]
