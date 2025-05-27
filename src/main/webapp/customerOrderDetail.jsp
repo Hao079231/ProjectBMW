@@ -22,7 +22,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-    <script src="js/csrf-protection.js"></script>
+    <script src="${pageContext.request.contextPath}/js/csrf-protection.js"></script>
     <title>JellyCat</title>
 </head>
 

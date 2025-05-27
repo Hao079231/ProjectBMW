@@ -2,11 +2,9 @@
 
 <head>
     <title>Sign Up & Login Page</title>
-    <!-- CSRF Token để JavaScript có thể truy cập -->
     <meta name="csrf-token" content="${sessionScope.csrfToken}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Nhúng script bảo vệ CSRF -->
     <script src="${pageContext.request.contextPath}/js/csrf-protection.js"></script>
     <style>
         body {
