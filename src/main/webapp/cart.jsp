@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
+    <title>Giỏ hàng của bạn</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@1.9.6/dist/tailwind.min.css">
 </head>
 <body class="bg-gray-100">
@@ -60,7 +60,7 @@
                 <span class="text-2xl font-bold text-blue-500">JELLYCAT</span>
             </div>
             <div class="flex items-center space-x-6">
-                <a href="ProductList" class="text-gray-600 hover:text-blue-500">Home</a>
+                <a href="ProductList" class="text-gray-600 hover:text-blue-500">Trang chủ</a>
             </div>
         </div>
     </header>
@@ -74,7 +74,7 @@
             if (cart != null && !cart.isEmpty()) {
                 for (Map.Entry<Integer, CartItem> entry : cart.getItems().entrySet()) {
                     CartItem item = entry.getValue();
-                    if (item.getQuantity() < 1 || item.getQuantity() > 100 || !item.getProduct().getStatus()) {
+                    if (item.getQuantity() < 1 || item.getQuantity() > item.getProduct().getStock() || !item.getProduct().getStatus()) {
                         hasInvalidItems = true;
                         break;
                     }
@@ -83,7 +83,7 @@
         %>
                 <div class="bg-yellow-600 text-white p-4 rounded-lg shadow-lg mb-6 flex items-center space-x-4">
                     <i class="fas fa-exclamation-circle text-xl"></i>
-                    <span>Some items in your cart are invalid or out of stock and have been removed.</span>
+                    <span>Một số sản phẩm trong giỏ hàng không hợp lệ hoặc hết hàng và đã bị xóa.</span>
                 </div>
         <%
                 }
@@ -91,12 +91,12 @@
         <table class="min-w-full bg-white border border-gray-300">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">Image</th>
-                    <th class="py-2 px-4 border-b">Product Name</th>
-                    <th class="py-2 px-4 border-b">Price</th>
-                    <th class="py-2 px-4 border-b">Quantity</th>
-                    <th class="py-2 px-4 border-b">Total</th>
-                    <th class="py-2 px-4 border-b">Action</th>
+                    <th class="py-2 px-4 border-b">Hình ảnh</th>
+                    <th class="py-2 px-4 border-b">Tên sản phẩm</th>
+                    <th class="py-2 px-4 border-b">Giá</th>
+                    <th class="py-2 px-4 border-b">Số lượng</th>
+                    <th class="py-2 px-4 border-b">Tổng</th>
+                    <th class="py-2 px-4 border-b">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -105,7 +105,7 @@
                         Integer productId = entry.getKey();
                         CartItem item = entry.getValue();
                         Products product = item.getProduct();
-                        if (item.getQuantity() >= 1 && item.getQuantity() <= 100 && product.getStatus()) {
+                        if (item.getQuantity() >= 1 && item.getQuantity() <= product.getStock() && product.getStatus()) {
                 %>
                             <tr>
                                 <td class="py-2 px-4 border-b">
@@ -115,21 +115,21 @@
                                 <td class="py-2 px-4 border-b"><%= product.getName() %></td>
                                 <td class="py-2 px-4 border-b"><%= product.getPrice() %> VND</td>
                                 <td class="py-2 px-4 border-b">
-                                    <form action="CartServlet" method="post" class="inline">
+                                    <form action="Cart" method="post" class="inline">
                                         <input type="hidden" name="action" value="edit"/>
                                         <input type="hidden" name="productId" value="<%= productId %>"/>
-                                        <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1" max="100" class="border border-gray-300 rounded px-2"/>
+                                        <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1" max="<%= product.getStock() %>" class="border border-gray-300 rounded px-2"/>
                                         <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
-                                        <button type="submit" class="ml-2 bg-blue-600 text-white rounded px-2 py-1">Update</button>
+                                        <button type="submit" class="ml-2 bg-blue-600 text-white rounded px-2 py-1">Cập nhật</button>
                                     </form>
                                 </td>
                                 <td class="py-2 px-4 border-b"><%= item.getTotal() %> VND</td>
                                 <td class="py-2 px-4 border-b">
-                                    <form action="CartServlet" method="post" class="inline">
+                                    <form action="Cart" method="post" class="inline">
                                         <input type="hidden" name="action" value="remove"/>
                                         <input type="hidden" name="productId" value="<%= productId %>"/>
                                         <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
-                                        <button type="submit" class="bg-red-600 text-white rounded px-2 py-1">Remove</button>
+                                        <button type="submit" class="bg-red-600 text-white rounded px-2 py-1">Xóa</button>
                                     </form>
                                 </td>
                             </tr>
@@ -141,7 +141,7 @@
         </table>
 
         <div class="mt-4">
-            <h2 class="text-xl font-bold">Total Amount: <%= cart.getTotalPrice() %> VND</h2>
+            <h2 class="text-xl font-bold">Tổng tiền: <%= cart.getTotalPrice() %> VND</h2>
         </div>
 
         <div class="mt-4">

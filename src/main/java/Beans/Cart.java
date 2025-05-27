@@ -21,7 +21,7 @@ public class Cart {
     public Cart(int cartID, int userId, int productId, int quantity, String feature) {
         this.cartID = cartID;
         this.userId = userId;
-        this.productId = productId; // Lưu product_id từ cơ sở dữ liệu
+        this.productId = productId;
         this.quantity = quantity;
         this.feature = feature;
     }
@@ -33,9 +33,10 @@ public class Cart {
         this.productId = productId;
         this.quantity = quantity;
         this.feature = feature;
-        this.product = product; // Khởi tạo Product
+        this.product = product;
     }
 
+    // Getter và Setter
     public int getCartID() {
         return cartID;
     }
@@ -53,11 +54,11 @@ public class Cart {
     }
 
     public int getProductId() {
-        return productId; // Getter cho productId
+        return productId;
     }
 
     public void setProductId(int productId) {
-        this.productId = productId; // Setter cho productId
+        this.productId = productId;
     }
 
     public int getQuantity() {
@@ -77,25 +78,38 @@ public class Cart {
     }
 
     public Products getProduct() {
-        return product; // Getter cho Product
+        return product;
     }
 
     public void setProduct(Products product) {
-        this.product = product; // Setter cho Product
+        this.product = product;
     }
 
-    // Thêm method để lấy giá từ Product
+    // Lấy giá từ Product
     public double getPrice() {
-        return product != null ? product.getPrice() : 0.0; // Lấy giá từ Product
+        return product != null ? product.getPrice() : 0.0;
     }
+
     // Thêm sản phẩm vào giỏ hàng
     public void addItem(CartItem item) {
+        // Kiểm tra tồn kho
+        int stock = item.getProduct() != null ? item.getProduct().getStock() : 0;
+        int newQuantity = item.getQuantity();
+
         if (items.containsKey(item.getProductId())) {
-            items.get(item.getProductId()).incrementQuantity();
+            newQuantity = items.get(item.getProductId()).getQuantity() + item.getQuantity();
+        }
+
+        if (newQuantity <= 0 || newQuantity > stock) {
+            throw new IllegalArgumentException("Số lượng không hợp lệ hoặc vượt quá tồn kho cho sản phẩm ID: " + item.getProductId());
+        }
+
+        if (items.containsKey(item.getProductId())) {
+            items.get(item.getProductId()).setQuantity(newQuantity);
         } else {
             items.put(item.getProductId(), item);
         }
-        System.out.println("Cart items: " + items);
+        System.out.println("Giỏ hàng: " + items);
     }
 
     // Xóa sản phẩm khỏi giỏ hàng
@@ -106,10 +120,15 @@ public class Cart {
     // Chỉnh sửa số lượng sản phẩm
     public void updateItemQuantity(int productId, int quantity) {
         CartItem item = items.get(productId);
-        if (item != null && quantity > 0) {
+        if (item != null) {
+            int stock = item.getProduct() != null ? item.getProduct().getStock() : 0;
+            if (quantity <= 0 || quantity > stock) {
+                throw new IllegalArgumentException("Số lượng không hợp lệ hoặc vượt quá tồn kho cho sản phẩm ID: " + productId);
+            }
             item.setQuantity(quantity);
         }
     }
+
     // Lấy danh sách các sản phẩm trong giỏ hàng
     public Map<Integer, CartItem> getItems() {
         return items;
@@ -119,9 +138,7 @@ public class Cart {
     public double getTotalPrice() {
         double total = 0;
         for (CartItem item : items.values()) {
-            if (item.getQuantity() >= 1 && item.getQuantity() <= 100) {
-                total += item.getPrice() * item.getQuantity();
-            }
+            total += item.getTotal(); // Sử dụng getTotal từ CartItem để tôn trọng giới hạn tồn kho
         }
         return total;
     }
@@ -130,7 +147,13 @@ public class Cart {
     public boolean isEmpty() {
         return items == null || items.isEmpty();
     }
+
+    // Xóa các mục không hợp lệ trong giỏ hàng
     public void cleanCart() {
-        items.entrySet().removeIf(entry -> entry.getValue().getQuantity() < 1 || entry.getValue().getQuantity() > 100);
+        items.entrySet().removeIf(entry -> {
+            CartItem item = entry.getValue();
+            int stock = item.getProduct() != null ? item.getProduct().getStock() : 0;
+            return item.getQuantity() < 1 || item.getQuantity() > stock;
+        });
     }
 }
