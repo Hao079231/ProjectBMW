@@ -173,4 +173,11 @@
     <servlet-name>ChangePasswordServlet</servlet-name>
     <url-pattern>/ChangePasswordServlet</url-pattern>
   </servlet-mapping>
+  <session-config>
+    <session-timeout>30</session-timeout>
+    <cookie-config>
+      <http-only>true</http-only>
+      <secure>true</secure>
+    </cookie-config>
+  </session-config>
 </web-app>

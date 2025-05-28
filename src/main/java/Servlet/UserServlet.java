@@ -66,13 +66,13 @@ public class UserServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
 
-        // Tạo đối tượng user
-        Users users = new Users(user.getUserId(), username, user.getPassword(), email, phone, address, user.getRole());
+        // Tạo đối tượng user, giữ nguyên salt của user hiện tại
+        Users users = new Users(user.getUserId(), username, user.getPassword(), email, phone, address, user.getRole(), user.getSalt());
 
         try (Connection conn = DBConnection.getConnection()) {
             if ("update".equals(action)) {
                 logger.debug("Updating user information: username={}, email={}, phone={}, address={}",
-                    username, email, phone, address);
+                        username, email, phone, address);
                 DBUsers.updateUser(conn, users);
                 request.getSession().setAttribute("user", users);
                 logger.info("Successfully updated user ID: {}", user.getUserId());

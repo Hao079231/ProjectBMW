@@ -11,23 +11,27 @@ import java.util.List;
 import Beans.Users;
 
 public class DBUsers {
-    // Thêm người dùng
+    // Insert new user with hashed password and salt
     public static void insert(Connection conn, Users user) {
-        String query = "INSERT INTO Users (username, password, email, phone, address, role) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stm = conn.prepareStatement(query)) {
-            stm.setString(1, user.getUsername());
-            stm.setString(2, user.getPassword());
-            stm.setString(3, user.getEmail());
-            stm.setString(4, user.getPhone());
-            stm.setString(5, user.getAddress());
-            stm.setString(6, user.getRole());
-            stm.executeUpdate();
+        String query = "INSERT INTO Users (username, password, email, phone, address, role, salt) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            String salt = PasswordUtils.generateSalt();
+            String hashedPassword = PasswordUtils.hashPassword(user.getPassword(), salt);
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, hashedPassword);
+            stmt.setString(3, user.getEmail());
+            stmt.setString(4, user.getPhone());
+            stmt.setString(5, user.getAddress());
+            stmt.setString(6, user.getRole());
+            stmt.setString(7, salt);
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Lỗi khi thêm người dùng: " + e.getMessage());
+            System.err.println("Error inserting user: " + e.getMessage());
             e.printStackTrace();
         }
     }
-    // Lấy thông tin người dùng theo userId
+
+    // Get user by ID
     public static Users getUserById(Connection conn, int userId) {
         String sql = "SELECT * FROM Users WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -35,52 +39,53 @@ public class DBUsers {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Users(
+                            rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("role"),
+                            rs.getString("salt")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving user by ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Get all users
+    public static List<Users> getAllUsers(Connection conn) {
+        List<Users> usersList = new ArrayList<>();
+        String sql = "SELECT * FROM Users WHERE role = 'user'";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Users user = new Users(
                         rs.getInt("user_id"),
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        rs.getString("role")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy thông tin người dùng theo userId: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null; // Trả về null nếu không tìm thấy người dùng
-    }
-    // Lấy danh sách tất cả người dùng
-    public static List<Users> getAllUsers(Connection conn) {
-        List<Users> usersList = new ArrayList<>();
-        String sql = "SELECT * FROM Users WHERE role = 'user'";
-        try (Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                Users user = new Users(
-                    rs.getInt("user_id"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("email"),
-                    rs.getString("phone"),
-                    rs.getString("address"),
-                    rs.getString("role")
+                        rs.getString("role"),
+                        rs.getString("salt")
                 );
                 usersList.add(user);
             }
         } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy danh sách người dùng: " + e.getMessage());
+            System.err.println("Error retrieving users: " + e.getMessage());
             e.printStackTrace();
         }
         return usersList;
     }
 
-
-    // Cập nhật thông tin người dùng
+    // Update user (excluding password)
     public static void updateUser(Connection conn, Users user) {
-        String sql = "UPDATE Users SET username = ?,  email = ?, phone = ?, address = ? WHERE user_id = ?";
+        String sql = "UPDATE Users SET username = ?, email = ?, phone = ?, address = ? WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
@@ -89,49 +94,54 @@ public class DBUsers {
             stmt.setInt(5, user.getUserId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Lỗi khi cập nhật người dùng: " + e.getMessage());
+            System.err.println("Error updating user: " + e.getMessage());
             e.printStackTrace();
         }
-        System.out.print("pass");
     }
 
-    // Xóa người dùng
+    // Delete user
     public static void deleteUser(Connection conn, int userId) {
         String sql = "DELETE FROM Users WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Lỗi khi xóa người dùng: " + e.getMessage());
+            System.err.println("Error deleting user: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // Đăng nhập
+    // Login with hashed password verification
     public static Users login(Connection conn, String username, String password) {
-        String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM Users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
-            stmt.setString(2, password);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Users(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("phone"),
-                        rs.getString("address"),
-                        rs.getString("role")
-                    );
+                    String storedHash = rs.getString("password");
+                    String salt = rs.getString("salt");
+                    if (PasswordUtils.verifyPassword(password, storedHash, salt)) {
+                        return new Users(
+                                rs.getInt("user_id"),
+                                rs.getString("username"),
+                                storedHash,
+                                rs.getString("email"),
+                                rs.getString("phone"),
+                                rs.getString("address"),
+                                rs.getString("role"),
+                                salt
+                        );
+                    }
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Lỗi khi đăng nhập: " + e.getMessage());
+            System.err.println("Error during login: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
     }
+
+    // Get user by username
     public static Users getUserByUsername(Connection conn, String username) {
         String sql = "SELECT * FROM Users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -139,44 +149,47 @@ public class DBUsers {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Users(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("phone"),
-                        rs.getString("address"),
-                        rs.getString("role")
+                            rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("role"),
+                            rs.getString("salt")
                     );
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Lỗi khi kiểm tra người dùng: " + e.getMessage());
+            System.err.println("Error checking user: " + e.getMessage());
             e.printStackTrace();
         }
-        return null; // Trả về null nếu không tìm thấy người dùng
+        return null;
     }
-    // Tìm kiếm người dùng theo tên
+
+    // Search users by username
     public static List<Users> searchUsersByUsername(Connection conn, String searchQuery) {
         List<Users> usersList = new ArrayList<>();
         String sql = "SELECT * FROM Users WHERE role = 'user' AND username LIKE ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, "%" + searchQuery + "%");  // Tìm kiếm với phần tử bắt đầu hoặc kết thúc với searchQuery
+            stmt.setString(1, "%" + searchQuery + "%");
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Users user = new Users(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("phone"),
-                        rs.getString("address"),
-                        rs.getString("role")
+                            rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("role"),
+                            rs.getString("salt")
                     );
                     usersList.add(user);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Lỗi khi tìm kiếm người dùng: " + e.getMessage());
+            System.err.println("Error searching users: " + e.getMessage());
             e.printStackTrace();
         }
         return usersList;
@@ -187,7 +200,7 @@ public class DBUsers {
         List<String> emails = new ArrayList<>();
         String sql = "SELECT email FROM Users";
         try (Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 emails.add(rs.getString("email"));
             }
@@ -195,21 +208,22 @@ public class DBUsers {
             System.err.println("Error getting emails: " + e.getMessage());
             e.printStackTrace();
         }
-        return emails;
+        return emails; // Corrected to return emails
     }
 
     // Update user password by email
     public static void updateUserPasswordByEmail(Connection conn, String password, String email) {
-        String sql = "UPDATE Users SET password = ? WHERE email = ?";
+        String sql = "UPDATE Users SET password = ?, salt = ? WHERE email = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, password);
-            stmt.setString(2, email);
+            String salt = PasswordUtils.generateSalt();
+            String hashedPassword = PasswordUtils.hashPassword(password, salt);
+            stmt.setString(1, hashedPassword);
+            stmt.setString(2, salt);
+            stmt.setString(3, email);
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error updating password: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
 }
-

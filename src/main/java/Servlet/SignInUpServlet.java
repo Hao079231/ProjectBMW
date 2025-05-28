@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.util.List;
 import Utils.DBUsers;
 import Beans.DBConnection;
+import Utils.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,8 @@ import org.slf4j.LoggerFactory;
 public class SignInUpServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = LoggerFactory.getLogger(SignInUpServlet.class);
+    private static final int MAX_LOGIN_ATTEMPTS = 5;
+    private static final long LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
 
     public SignInUpServlet() {
         super();
@@ -45,6 +48,15 @@ public class SignInUpServlet extends HttpServlet {
 
         logger.info("POST request received from IP: {}, action: {}", remoteIp, action);
 
+        // Validate CSRF token
+        String csrfToken = request.getParameter("csrfToken");
+        String sessionCsrfToken = (String) request.getSession().getAttribute("csrfToken");
+        if (csrfToken == null || !csrfToken.equals(sessionCsrfToken)) {
+            logger.warn("Invalid CSRF token from IP: {}", remoteIp);
+            response.sendRedirect("signinup.jsp?status=invalid_csrf");
+            return;
+        }
+
         if ("signup".equals(action)) {
             handleSignup(request, response);
         } else if ("signin".equals(action)) {
@@ -61,9 +73,32 @@ public class SignInUpServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String remoteIp = request.getRemoteAddr();
+        HttpSession session = request.getSession();
+
+        // Check for lockout
+        Long lockoutTime = (Long) session.getAttribute("lockoutTime");
+        if (lockoutTime != null && System.currentTimeMillis() < lockoutTime) {
+            logger.warn("Account locked for IP: {}, username: {}", remoteIp, username);
+            response.sendRedirect("signinup.jsp?status=account_locked");
+            return;
+        }
+
+        // Check login attempts
+        Integer attempts = (Integer) session.getAttribute("loginAttempts");
+        if (attempts == null) {
+            attempts = 0;
+        }
+
+        if (attempts >= MAX_LOGIN_ATTEMPTS) {
+            session.setAttribute("lockoutTime", System.currentTimeMillis() + LOCKOUT_DURATION);
+            logger.warn("Too many login attempts from IP: {}, username: {}", remoteIp, username);
+            response.sendRedirect("signinup.jsp?status=too_many_attempts");
+            return;
+        }
 
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             logger.warn("Empty fields in signin attempt from IP: {}, username: {}", remoteIp, username);
+            session.setAttribute("loginAttempts", attempts + 1);
             response.sendRedirect("signinup.jsp?status=empty_fields");
             return;
         }
@@ -71,8 +106,12 @@ public class SignInUpServlet extends HttpServlet {
         try (Connection conn = DBConnection.getConnection()) {
             Users user = DBUsers.login(conn, username, password);
             if (user != null) {
-                HttpSession session = request.getSession();
+                // Regenerate session ID to prevent session fixation
+                session.invalidate();
+                session = request.getSession(true);
                 session.setAttribute("user", user);
+                session.setMaxInactiveInterval(30 * 60); // 30 minutes timeout
+                session.setAttribute("loginAttempts", 0); // Reset attempts
                 logger.info("Signin successful from IP: {}, username: {}, role: {}", remoteIp, username, user.getRole());
                 if ("admin".equals(user.getRole())) {
                     response.sendRedirect("Product");
@@ -80,10 +119,12 @@ public class SignInUpServlet extends HttpServlet {
                     response.sendRedirect("ProductList");
                 }
             } else {
+                session.setAttribute("loginAttempts", attempts + 1);
                 logger.warn("Signin failed from IP: {}, username: {}", remoteIp, username);
                 response.sendRedirect("signinup.jsp?status=signin_failed");
             }
         } catch (Exception e) {
+            session.setAttribute("loginAttempts", attempts + 1);
             logger.error("Signin error from IP: {}, username: {}, error: {}", remoteIp, username, e.getMessage());
             response.sendRedirect("signinup.jsp?status=signin_error");
         }
@@ -111,14 +152,21 @@ public class SignInUpServlet extends HttpServlet {
         String remoteIp = request.getRemoteAddr();
 
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty() ||
-            email == null || email.trim().isEmpty() || address == null || address.trim().isEmpty() ||
-            phone == null || phone.trim().isEmpty()) {
+                email == null || email.trim().isEmpty() || address == null || address.trim().isEmpty() ||
+                phone == null || phone.trim().isEmpty()) {
             logger.warn("Empty fields in signup attempt from IP: {}, username: {}", remoteIp, username);
             response.sendRedirect("signinup.jsp?status=signup_error");
             return;
         }
 
-        Users newUser = new Users(0, username, password, email, phone, address, "user");
+        // Validate password strength
+        if (!PasswordUtils.isPasswordStrong(password)) {
+            logger.warn("Weak password in signup attempt from IP: {}, username: {}", remoteIp, username);
+            response.sendRedirect("signinup.jsp?status=weak_password");
+            return;
+        }
+
+        Users newUser = new Users(0, username, password, email, phone, address, "user", null);
 
         try (Connection conn = DBConnection.getConnection()) {
             Users existingUser = DBUsers.getUserByUsername(conn, username);
