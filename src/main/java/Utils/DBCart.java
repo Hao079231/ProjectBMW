@@ -10,22 +10,48 @@ import java.util.Map;
 
 public class DBCart {
 
-    // Add a product to the cart
+    // Phương thức hỗ trợ lấy tồn kho sản phẩm
+    private static int getProductStock(int productId) throws SQLException, ClassNotFoundException {
+        String query = "SELECT stock FROM Products WHERE product_id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, productId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("stock");
+            }
+            return 0; // Trả về 0 nếu không tìm thấy sản phẩm hoặc không có tồn kho
+        }
+    }
+
+    // Thêm sản phẩm vào giỏ hàng
     public static void addItemToCart(int userId, int productId, int quantity, String feature) throws SQLException, ClassNotFoundException {
-        String checkQuery = "SELECT * FROM Cart WHERE user_id = ? AND product_id = ?";
+        // Kiểm tra tồn kho
+        int stock = getProductStock(productId);
+        if (quantity <= 0 || quantity > stock) {
+            throw new SQLException("Số lượng không hợp lệ hoặc không đủ tồn kho cho sản phẩm ID: " + productId);
+        }
+
+        String checkQuery = "SELECT quantity FROM Cart WHERE user_id = ? AND product_id = ?";
         String updateQuery = "UPDATE Cart SET quantity = quantity + ? WHERE user_id = ? AND product_id = ?";
         String insertQuery = "INSERT INTO Cart (user_id, product_id, quantity, feature) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
 
-            // Check if the product is already in the cart
+            // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
             checkStmt.setInt(1, userId);
             checkStmt.setInt(2, productId);
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                // If the product exists, update the quantity
+                // Nếu sản phẩm đã có, kiểm tra tổng số lượng so với tồn kho
+                int currentQuantity = rs.getInt("quantity");
+                int newQuantity = currentQuantity + quantity;
+                if (newQuantity > stock) {
+                    throw new SQLException("Tổng số lượng vượt quá tồn kho cho sản phẩm ID: " + productId);
+                }
+                // Cập nhật số lượng
                 try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
                     updateStmt.setInt(1, quantity);
                     updateStmt.setInt(2, userId);
@@ -33,7 +59,7 @@ public class DBCart {
                     updateStmt.executeUpdate();
                 }
             } else {
-                // If not, insert a new cart item
+                // Thêm mới mục giỏ hàng
                 try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
                     insertStmt.setInt(1, userId);
                     insertStmt.setInt(2, productId);
@@ -45,11 +71,11 @@ public class DBCart {
         }
     }
 
-    // Get all the cart items for a specific user
+    // Lấy tất cả mục trong giỏ hàng của người dùng
     public static Cart getCartByUserId(int userId) throws SQLException, ClassNotFoundException {
         Cart cart = new Cart();
         String sql = "SELECT c.cartID, c.user_id, c.product_id, c.quantity, c.feature, " +
-                "p.name AS productName, p.price, p.image " +
+                "p.name AS productName, p.price, p.image, p.stock " +
                 "FROM Cart c JOIN Products p ON c.product_id = p.product_id " +
                 "WHERE c.user_id = ?";
 
@@ -67,19 +93,19 @@ public class DBCart {
                 String name = rs.getString("productName");
                 int price = rs.getInt("price");
                 byte[] image = rs.getBytes("image");
-                // Create a Products object for the product
-                Products product = new Products(productId, name, null, image, price, null, 0, 0, true);
+                int stock = rs.getInt("stock");
+                // Tạo đối tượng Products
+                Products product = new Products(productId, name, null, image, price, null, stock, 0, true);
 
-                // Create a CartItem object and add it to the cart
+                // Tạo đối tượng CartItem và thêm vào giỏ hàng
                 CartItem item = new CartItem(productId, quantity, product);
-                cart.addItem(item);  // Add item to the cart
-
+                cart.addItem(item);
             }
         }
         return cart;
     }
 
-    // Remove an item from the cart
+    // Xóa một mục khỏi giỏ hàng
     public static void removeItemFromCart(int userId, int productId) throws SQLException, ClassNotFoundException {
         String query = "DELETE FROM Cart WHERE user_id = ? AND product_id = ?";
 
@@ -92,8 +118,14 @@ public class DBCart {
         }
     }
 
-    // Update the quantity of a product in the cart
+    // Cập nhật số lượng sản phẩm trong giỏ hàng
     public static void updateItemQuantity(int userId, int productId, int quantity) throws SQLException, ClassNotFoundException {
+        // Kiểm tra tồn kho
+        int stock = getProductStock(productId);
+        if (quantity <= 0 || quantity > stock) {
+            throw new SQLException("Số lượng không hợp lệ hoặc không đủ tồn kho cho sản phẩm ID: " + productId);
+        }
+
         String query = "UPDATE Cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
 
         try (Connection connection = DBConnection.getConnection();
@@ -106,14 +138,16 @@ public class DBCart {
         }
     }
 
-    // Calculate the total price of the cart
+    // Tính tổng giá giỏ hàng
     public static double calculateTotalPrice(Cart cart) {
         double total = 0.0;
         for (CartItem item : cart.getItems().values()) {
-            total += item.getPrice() * item.getQuantity();
+            total += item.getTotal(); // Sử dụng getTotal để tôn trọng giới hạn tồn kho
         }
         return total;
     }
+
+    // Thêm đơn hàng
     public static int addOrder(int customerId, double totalAmount, String shippingAddress) throws SQLException, ClassNotFoundException {
         String insertOrderQuery = "INSERT INTO Orders (customer_id, total_amount, shipping_address, payment_status, delivery_status, created_at, updated_at) " +
                 "VALUES (?, ?, ?, 0, 'confirmed', GETDATE(), GETDATE())";
@@ -128,7 +162,7 @@ public class DBCart {
 
             insertStmt.executeUpdate();
 
-            // Lấy ID của đơn hàng vừa được tạo
+            // Lấy ID của đơn hàng vừa tạo
             ResultSet rs = insertStmt.getGeneratedKeys();
             if (rs.next()) {
                 orderId = rs.getInt(1);
@@ -138,8 +172,7 @@ public class DBCart {
         return orderId;
     }
 
-    // Thêm chi tiết đơn hàng
-    // Thêm chi tiết đơn hàng và giảm stock
+    // Thêm chi tiết đơn hàng và giảm tồn kho
     public static void addOrderItems(int orderId, Map<Integer, CartItem> cartItems) throws SQLException, ClassNotFoundException {
         String insertOrderItemQuery = "INSERT INTO OrderItems (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
         String updateStockQuery = "UPDATE Products SET stock = stock - ? WHERE product_id = ?";
@@ -149,17 +182,23 @@ public class DBCart {
              PreparedStatement updateStockStmt = connection.prepareStatement(updateStockQuery)) {
 
             for (CartItem item : cartItems.values()) {
+                // Kiểm tra tồn kho trước khi thêm chi tiết đơn hàng
+                int stock = getProductStock(item.getProductId());
+                if (item.getQuantity() > stock) {
+                    throw new SQLException("Không đủ tồn kho cho sản phẩm ID: " + item.getProductId());
+                }
+
                 // Thêm chi tiết đơn hàng
                 insertStmt.setInt(1, orderId);
                 insertStmt.setInt(2, item.getProductId());
                 insertStmt.setInt(3, item.getQuantity());
-                insertStmt.setDouble(4, item.getPrice() * item.getQuantity());
-                insertStmt.addBatch(); // Sử dụng batch để tăng hiệu suất
+                insertStmt.setDouble(4, item.getTotal()); // Sử dụng getTotal để tôn trọng giới hạn tồn kho
+                insertStmt.addBatch();
 
-                // Giảm số lượng tồn kho
+                // Giảm tồn kho
                 updateStockStmt.setInt(1, item.getQuantity());
                 updateStockStmt.setInt(2, item.getProductId());
-                updateStockStmt.addBatch(); // Sử dụng batch để tăng hiệu suất
+                updateStockStmt.addBatch();
             }
 
             // Thực thi các lệnh batch
@@ -167,5 +206,4 @@ public class DBCart {
             updateStockStmt.executeBatch();
         }
     }
-
 }

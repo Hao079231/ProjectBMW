@@ -45,6 +45,14 @@ public class CartItem {
     public void incrementQuantity() {
         this.quantity++;
     }
+
+    // Tính tổng giá, giới hạn bởi tồn kho
     public double getTotal() {
-        return (quantity >= 1 && quantity <= 100) ? product.getPrice() * quantity : 0;
-    }}
+        if (product == null || quantity < 1) {
+            return 0.0;
+        }
+        // Giới hạn số lượng theo tồn kho
+        int maxQuantity = Math.min(quantity, product.getStock());
+        return maxQuantity * product.getPrice();
+    }
+}
