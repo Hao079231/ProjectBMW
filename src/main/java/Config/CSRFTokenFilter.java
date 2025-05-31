@@ -31,7 +31,6 @@ public class CSRFTokenFilter implements Filter {
     HttpSession session = httpRequest.getSession(true);
     String remoteIp = httpRequest.getRemoteAddr();
 
-    // Sinh CSRF token nếu chưa có
     String csrfToken = (String) session.getAttribute(CSRF_TOKEN_NAME);
     if (csrfToken == null) {
       csrfToken = UUID.randomUUID().toString();
@@ -39,39 +38,30 @@ public class CSRFTokenFilter implements Filter {
       logger.info("Generated new CSRF token for session: {}, IP: {}", session.getId(), remoteIp);
     }
 
-    // Set token as request attribute so it can be accessed in JSP
-    request.setAttribute(CSRF_TOKEN_NAME, csrfToken);
 
-    // Kiểm tra CSRF token cho các yêu cầu POST
     if ("POST".equalsIgnoreCase(httpRequest.getMethod())) {
-      // Bỏ qua kiểm tra CSRF cho action logout
       String action = httpRequest.getParameter("action");
       if ("logout".equalsIgnoreCase(action)) {
         chain.doFilter(request, response);
         return;
       }
 
-      // Kiểm tra CSRF token từ form parameter
       String requestCsrfToken = httpRequest.getParameter(CSRF_TOKEN_NAME);
-      
-      // Nếu không tìm thấy trong form, kiểm tra header (cho AJAX requests)
+
       if (requestCsrfToken == null) {
         requestCsrfToken = httpRequest.getHeader("X-CSRF-Token");
       }
 
-      // Kiểm tra token có hợp lệ hay không
       if (requestCsrfToken == null || !requestCsrfToken.equals(csrfToken)) {
         logger.warn("CSRF token validation failed for IP: {}, session: {}, token: {}", 
             remoteIp, session.getId(), requestCsrfToken);
         
-        // Nếu là AJAX request, trả về lỗi 403 dạng JSON
         String xRequestedWith = httpRequest.getHeader("X-Requested-With");
         if ("XMLHttpRequest".equals(xRequestedWith)) {
           httpResponse.setContentType("application/json");
           httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
           httpResponse.getWriter().write("{\"error\":\"Invalid CSRF Token\"}");
         } else {
-          // Nếu là request thông thường, chuyển hướng đến trang lỗi
           httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid CSRF Token");
         }
         return;

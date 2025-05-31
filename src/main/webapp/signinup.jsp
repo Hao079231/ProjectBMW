@@ -1,10 +1,8 @@
 <html>
 <head>
     <title>Sign Up & Login Page</title>
-    <meta name="csrf-token" content="${sessionScope.csrfToken}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <script src="${pageContext.request.contextPath}/js/csrf-protection.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -81,7 +79,7 @@
             <p class="text-gray-500 text-center mb-4">Use your personal details to create an account</p>
             <form id="signupForm" action="SignInUp" method="POST" data-no-csrf="true">
                 <input type="hidden" name="action" value="signup">
-                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                <input type="hidden" name="csrfToken" value="${csrfToken}" />
                 <input type="text" name="username" placeholder="User"
                     class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <input type="password" name="password" placeholder="Password"
@@ -101,7 +99,7 @@
             <h2 class="text-3xl font-bold mb-4">Sign In</h2>
             <form id="loginForm" action="SignInUp" method="POST" data-no-csrf="true">
                 <input type="hidden" name="action" value="signin">
-                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                <input type="hidden" name="csrfToken" value="${csrfToken}" />
                 <input type="text" name="username" placeholder="User"
                     class="w-full p-2 mb-4 border border-gray-300 rounded">
                 <input type="password" name="password" placeholder="Password"

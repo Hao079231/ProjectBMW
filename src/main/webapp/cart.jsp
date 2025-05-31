@@ -119,16 +119,16 @@
                                         <input type="hidden" name="action" value="edit"/>
                                         <input type="hidden" name="productId" value="<%= productId %>"/>
                                         <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1" max="<%= product.getStock() %>" class="border border-gray-300 rounded px-2"/>
-                                        <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
+                                        <input type="hidden" name="csrfToken" value="${csrfToken}" />
                                         <button type="submit" class="ml-2 bg-blue-600 text-white rounded px-2 py-1">Cập nhật</button>
                                     </form>
                                 </td>
                                 <td class="py-2 px-4 border-b"><%= item.getTotal() %> VND</td>
                                 <td class="py-2 px-4 border-b">
                                     <form action="Cart" method="post" class="inline">
+                                        <input type="hidden" name="csrfToken" value="${csrfToken}" />
                                         <input type="hidden" name="action" value="remove"/>
                                         <input type="hidden" name="productId" value="<%= productId %>"/>
-                                        <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
                                         <button type="submit" class="bg-red-600 text-white rounded px-2 py-1">Xóa</button>
                                     </form>
                                 </td>
